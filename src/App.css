@@ -1,0 +1,91 @@
+.App {
+  text-align: center;
+  background-color: #282c34;
+  height: 100%;
+}
+
+.App-header {
+  background-color: #282c34;
+  /* min-height: 100vh; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+/* input {
+  height: 80%;
+  width: 80%;
+  justify-content: center;
+  align-items: center;
+  -ms-transform: translateY(6%);
+  transform: translateY(6%);
+  text-align: center;
+  font-size: 50px;
+} */
+
+.cell {
+  color: aliceblue;
+  width: 75px;
+  height: 75px;
+  align-items: center;
+  justify-content: center;
+  background-color: darkgray;
+  /* margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px; */
+  margin: 5px 2px 5px 2px;
+  text-align: center;
+  font-size: 60px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.grid {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+.keyboard {
+  margin-top: 10vw;
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+}
+
+.key {
+  min-height: 40px;
+  min-width: 40px;
+  text-align: center;
+  font-size: 150%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 0;
+  margin: 1px;
+}
+
+.keys1
+.keys2
+.keys3 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  height: 50px;
+  width: 50px;
+  margin-top: 20px;
+}
