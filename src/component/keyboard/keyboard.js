@@ -9,12 +9,13 @@ class keyboard extends React.Component {
             columnPosition: 0,
             submittedWord: ""
         }
-        this.readWord = this.readWord.bind(this);
+        /*this.readWord = this.readWord.bind(this);
         this.submitWord = this.submitWord.bind(this);
         this.deleteLetter = this.deleteLetter.bind(this);
+        */
     }
 
-    readWord(letter) {
+    /*readWord(letter) {
         if (this.state.rowPosition !== 4) {
             var currentWord = this.state.submittedWord;
             console.log(currentWord);
@@ -37,7 +38,18 @@ class keyboard extends React.Component {
 
     deleteLetter() {
         console.log('deleting letter');
-    }
+        if (this.state.rowPosition !== 0) {
+            var currentWord = this.state.submittedWord;
+            currentWord = currentWord.substring(0, currentWord.length-1);
+            this.setState(state => ({
+                rowPosition: state.rowPosition - 1,
+                submittedWord: currentWord
+            }))
+            console.log(currentWord);
+        } else {
+            return 0
+        }
+    }*/
     
     render() {
         return (
@@ -73,14 +85,14 @@ class keyboard extends React.Component {
                 </div>
                 <div className='keys3'>
                     <button onClick={this.submitWord} type="submit" className='key'>Enter</button>
-                    <button onClick={() => this.readWord("")} type="submit" className='key'>ظ</button>
-                    <button onClick={() => this.readWord("")} type="submit" className='key'>ط</button>
-                    <button onClick={() => this.readWord("")} type="submit" className='key'>ز</button>
-                    <button onClick={() => this.readWord("")} type="submit" className='key'>ر</button>
-                    <button onClick={() => this.readWord("")} type="submit" className='key'>ذ</button>
-                    <button onClick={() => this.readWord("")} type="submit" className='key'>د</button>
-                    <button onClick={() => this.readWord("")} type="submit" className='key'>پ</button>
-                    <button onClick={() => this.readWord("")} type="submit" className='key'>و</button>
+                    <button onClick={() => this.readWord("ظ")} type="submit" className='key'>ظ</button>
+                    <button onClick={() => this.readWord("ط")} type="submit" className='key'>ط</button>
+                    <button onClick={() => this.readWord("ز")} type="submit" className='key'>ز</button>
+                    <button onClick={() => this.readWord("ر")} type="submit" className='key'>ر</button>
+                    <button onClick={() => this.readWord("ذ")} type="submit" className='key'>ذ</button>
+                    <button onClick={() => this.readWord("د")} type="submit" className='key'>د</button>
+                    <button onClick={() => this.readWord("پ")} type="submit" className='key'>پ</button>
+                    <button onClick={() => this.readWord("و")} type="submit" className='key'>و</button>
                     <button onClick={this.deleteLetter} type="submit" className='key'>Del</button>
                 </div>
             </div>
