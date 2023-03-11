@@ -6,9 +6,9 @@ class Grid extends React.Component {
         super(props);
         this.state = {
 			box11: "B",
-			box12: "B",
 			box13: "B",
 			box14: "B",
+			box12: "B",
 			box21: "B",
 			box22: "B",
 			box23: "B",

@@ -3,6 +3,10 @@ import './App.css';
 import Grid from './component/grid/grid';
 import Keyboard from './component/keyboard/keyboard';
 
+var todaysWord;
+const columnCount = 4;
+const rowCount = 5;
+
 class App extends Component {
 
 	constructor(props) {
@@ -12,26 +16,26 @@ class App extends Component {
             rowPosition: 1,
             columnPosition: 1,
             submittedWord: "",
-			box11: "B",
-			box13: "B",
-			box14: "B",
-			box12: "B",
-			box21: "B",
-			box22: "B",
-			box23: "B",
-			box24: "B",
-			box31: "B",
-			box32: "B",
-			box33: "B",
-			box34: "B",
-			box41: "B",
-			box42: "B",
-			box43: "B",
-			box44: "B",
-			box51: "B",
-			box52: "B",
-			box53: "B",
-			box54: "B"
+			box11: "",
+			box13: "",
+			box14: "",
+			box12: "",
+			box21: "",
+			box22: "",
+			box23: "",
+			box24: "",
+			box31: "",
+			box32: "",
+			box33: "",
+			box34: "",
+			box41: "",
+			box42: "",
+			box43: "",
+			box44: "",
+			box51: "",
+			box52: "",
+			box53: "",
+			box54: ""
         }
 
         this.readWord = this.readWord.bind(this);
@@ -39,8 +43,12 @@ class App extends Component {
         this.deleteLetter = this.deleteLetter.bind(this);
     }
 
+	componentDidMount() {
+		todaysWord = this.getTodaysWord();
+	}
+
 	readWord(letter) {
-        if (this.state.columnPosition !== 5) {
+        if (this.state.columnPosition !== columnCount+1) {
             var currentWord = this.state.submittedWord;
             console.log(currentWord);
             currentWord += letter;
@@ -52,7 +60,6 @@ class App extends Component {
         } else {
             return 0
         }
-
         console.log(this.state.submittedWord);
     }
 
@@ -152,11 +159,17 @@ class App extends Component {
 
     submitWord() {
         console.log('submitting word');
-		this.setState(state => ({
-			rowPosition: this.state.rowPosition + 1,
-			columnPosition: 1,
-			submittedWord: ""
-		}))
+
+		if (this.state.rowPosition !== rowCount && this.state.columnPosition == columnCount+1) {
+			
+			this.assessWord(this.state.submittedWord, todaysWord);
+
+			this.setState(state => ({
+				rowPosition: this.state.rowPosition + 1,
+				columnPosition: 1,
+				submittedWord: ""
+			}))
+		}
     }
 
     deleteLetter() {
@@ -174,7 +187,50 @@ class App extends Component {
         }
     }
 
+	getTodaysWord() {
+
+		const fourLetterWordList = require('./constants/FourLetterWordList.ts')
+
+		const wordCount = fourLetterWordList.length
+		const todaysIndex = Math.floor(Math.random() * wordCount);
+
+		const todaysWord = fourLetterWordList[todaysIndex][0];
+
+		console.log(`today's word is: ${todaysWord}`);
+
+		return todaysWord;
+	}
+
+	assessWord(submittedWord, todaysWord) {
+
+		let submittedWordShort = submittedWord.replace('ـ', '');
+
+		for (let i = 0; i <= rowCount-1; i++) {
+			if (submittedWordShort[i] == todaysWord[i]) {
+				console.log(`Letter ${submittedWordShort[i]} is correct`);
+				//turn cell green
+			} else if (submittedWordShort[i] !== todaysWord[i] && todaysWord.includes(submittedWordShort[i])) {
+				console.log(`Righ letter ${submittedWordShort[i]}, wrong cell`);
+				//turn cell yellow
+			} else {
+				console.log(`Letter ${submittedWordShort[i]} is incorrect`);
+			}
+		}
+
+		if (submittedWordShort == todaysWord) {
+			console.log("CORRECT WORD!");
+			return true;
+		}
+	}
+
 	render() {
+		
+		/*useEffect(() => {
+			todaysWord = this.getTodaysWord();
+		}, []);
+		//doesnt work for class based component
+		*/
+
 		return (
 			<div className="App">
 				<header className="App-header">

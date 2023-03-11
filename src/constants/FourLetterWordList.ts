@@ -1,15 +1,14 @@
-export const FOURLETTERWORDS = [
-    'سلام',
-    'چطور',
-    'هزار',
-    'بیان',
-    'معلم',
-    'صلاح',
-    'زبان',
-    'شروع',
-    'صحیح',
-    'آشنا',
-    'کتاب',
-    'جواب',
-    'بیان',
+module.exports = [
+    ['سلام', 'Hi'],
+    ['چطور', 'How'],
+    ['هزار', 'Thousand'],
+    ['بیان', 'Describe'],
+    ['معلم', 'Teacher'],
+    ['صلاح', 'Weapon, right'],
+    ['زبان', 'Tongue, language'],
+    ['شروع', 'Begin, start, commence'],
+    ['صحیح', 'Correct'],
+    ['آشنا', 'Familiar, Known'],
+    ['کتاب', 'Book'],
+    ['جواب', 'Answer, Response']
 ]
