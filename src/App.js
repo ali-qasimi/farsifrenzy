@@ -1,366 +1,295 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import './App.css';
 import Grid from './component/grid/grid';
 import Keyboard from './component/keyboard/keyboard';
+import { flushSync } from 'react-dom';
 
 var todaysWord;
-const columnCount = 4;
-const rowCount = 5;
+const columnCount = 3; 
+const rowCount = 4;
+var endGame = false;
 
-class App extends Component {
+/*componentDidMount() {
+	todaysWord = this.getTodaysWord();
+}*/
 
-	constructor(props) {
-        super(props);
+function App() {
+
+	useEffect(() => {
+		todaysWord = getTodaysWord();
+	}, []);
 		
-		this.state = {
-            rowPosition: 1,
-            columnPosition: 1,
-            submittedWord: "",
-			box11: "",
-			box13: "",
-			box14: "",
-			box12: "",
-			box21: "",
-			box22: "",
-			box23: "",
-			box24: "",
-			box31: "",
-			box32: "",
-			box33: "",
-			box34: "",
-			box41: "",
-			box42: "",
-			box43: "",
-			box44: "",
-			box51: "",
-			box52: "",
-			box53: "",
-			box54: ""
-        }
+	const [gameState, setGameState] = useState({
+		rowPosition: 0,
+		columnPosition: 4, //+1 for triggering useeffect on first render
+		submittedWord: "",
+		bufferLetter: "",
+		moveCount: 0,
+		grid: [
+			[
+				{letter: "", color: "darkgray"},
+				{letter: "", color: "darkgray"},
+				{letter: "", color: "darkgray"},
+				{letter: "", color: "darkgray"}
+			],
+			[
+				{letter: "", color: "darkgray"},
+				{letter: "", color: "darkgray"},
+				{letter: "", color: "darkgray"},
+				{letter: "", color: "darkgray"}
+			],
+			[
+				{letter: "", color: "darkgray"},
+				{letter: "", color: "darkgray"},
+				{letter: "", color: "darkgray"},
+				{letter: "", color: "darkgray"}
+			],
+			[
+				{letter: "", color: "darkgray"},
+				{letter: "", color: "darkgray"},
+				{letter: "", color: "darkgray"},
+				{letter: "", color: "darkgray"}
+			],
+			[
+				{letter: "", color: "darkgray"},
+				{letter: "", color: "darkgray"},
+				{letter: "", color: "darkgray"},
+				{letter: "", color: "darkgray"}
+			],
+		],
+		cellColor: "darkgray"
+	})
 
-        this.readWord = this.readWord.bind(this);
-        this.submitWord = this.submitWord.bind(this);
-        this.deleteLetter = this.deleteLetter.bind(this);
-    }
+	function readWord(letter) {
+		if (gameState.columnPosition !== 0 && gameState.rowPosition <= 4) {
+			let currentWord = gameState.submittedWord;
+			console.log(currentWord);
+			// currentWord += letter;
 
-	componentDidMount() {
-		todaysWord = this.getTodaysWord();
-	}
-
-	readWord(letter) {
-        if (this.state.columnPosition !== columnCount+1) {
-            var currentWord = this.state.submittedWord;
-            console.log(currentWord);
-            currentWord += letter;
-            this.setState(state => ({
-                columnPosition: state.columnPosition + 1,
-                submittedWord: currentWord
-            }))
-			this.boxAddLetter(letter);
-        } else {
-            return 0
-        }
-        console.log(this.state.submittedWord);
-    }
-
-	boxAddLetter(letter) {
-		if (this.state.rowPosition == 1) {
-			if (this.state.columnPosition == 1) {
-				this.setState(state => ({
-					box11: letter
-				}))
-			} else if (this.state.columnPosition == 2) {
-				this.setState(state => ({
-					box12: letter
-				}))
-			} else if (this.state.columnPosition == 3) {
-				this.setState(state => ({
-					box13: letter
-				}))
-			} else if (this.state.columnPosition == 4) {
-				this.setState(state => ({
-					box14: letter
-				}))
-			}
-		} else if (this.state.rowPosition == 2) {
-			if (this.state.columnPosition == 1) {
-				this.setState(state => ({
-					box21: letter
-				}))
-			} else if (this.state.columnPosition == 2) {
-				this.setState(state => ({
-					box22: letter
-				}))
-			} else if (this.state.columnPosition == 3) {
-				this.setState(state => ({
-					box23: letter
-				}))
-			} else if (this.state.columnPosition == 4) {
-				this.setState(state => ({
-					box24: letter
-				}))
-			}
-		} else if (this.state.rowPosition == 3) {
-			if (this.state.columnPosition == 1) {
-				this.setState(state => ({
-					box31: letter
-				}))
-			} else if (this.state.columnPosition == 2) {
-				this.setState(state => ({
-					box32: letter
-				}))
-			} else if (this.state.columnPosition == 3) {
-				this.setState(state => ({
-					box33: letter
-				}))
-			} else if (this.state.columnPosition == 4) {
-				this.setState(state => ({
-					box34: letter
-				}))
-			}
-		} else if (this.state.rowPosition == 4) {
-			if (this.state.columnPosition == 1) {
-				this.setState(state => ({
-					box41: letter
-				}))
-			} else if (this.state.columnPosition == 2) {
-				this.setState(state => ({
-					box42: letter
-				}))
-			} else if (this.state.columnPosition == 3) {
-				this.setState(state => ({
-					box43: letter
-				}))
-			} else if (this.state.columnPosition == 4) {
-				this.setState(state => ({
-					box44: letter
-				}))
-			}
-		} else if (this.state.rowPosition == 5) {
-			if (this.state.columnPosition == 1) {
-				this.setState(state => ({
-					box51: letter
-				}))
-			} else if (this.state.columnPosition == 2) {
-				this.setState(state => ({
-					box52: letter
-				}))
-			} else if (this.state.columnPosition == 3) {
-				this.setState(state => ({
-					box53: letter
-				}))
-			} else if (this.state.columnPosition == 4) {
-				this.setState(state => ({
-					box54: letter
-				}))
-			}
-		}
-	}
-
-    submitWord() {
-        console.log('submitting word');
-
-		if (this.state.rowPosition !== rowCount && this.state.columnPosition == columnCount+1) {
+			setGameState(previousState => {
+				return { ...previousState,
+					submittedWord: previousState.submittedWord + letter,
+					bufferLetter: letter,
+					columnPosition: previousState.columnPosition - 1
+				}	
+			});
 			
-			this.assessWord(this.state.submittedWord, todaysWord);
-
-			this.setState(state => ({
-				rowPosition: this.state.rowPosition + 1,
-				columnPosition: 1,
-				submittedWord: ""
-			}))
+			// boxAddLetter(letter);
+			
 		}
-    }
+		console.log(gameState.submittedWord);
+	}
+	
+	function submitWord() {
+	
+		if (gameState.rowPosition <= rowCount && gameState.columnPosition == 0) {
+			console.log('submitting word');
+			assessWord(gameState.submittedWord, todaysWord);
+			
+			setGameState(previousState => {
+				return { ...previousState,
+					rowPosition: previousState.rowPosition + 1,
+					columnPosition: 4,
+					submittedWord: "",
+					bufferLetter: ""
+				}
+			});
+		}
+	}
+	
+	function deleteLetter() {
+		console.log('deleting letter');
+		if (gameState.columnPosition >= -1 && gameState.columnPosition <= 3) {
+			var currentWord = gameState.submittedWord;
+			currentWord = currentWord.substring(0, currentWord.length-1);
+			
+			let updatedGrid = [...gameState.grid];
+			let updatedCell = updatedGrid[gameState.rowPosition][gameState.columnPosition];
+			updatedCell.letter = "";
+			updatedGrid[gameState.rowPosition][gameState.columnPosition] = updatedCell;
 
-    deleteLetter() {
-        console.log('deleting letter');
-        if (this.state.columnPosition !== 0) {
-            var currentWord = this.state.submittedWord;
-            currentWord = currentWord.substring(0, currentWord.length-1);
-            this.setState(state => ({
-                columnPosition: state.columnPosition - 1,
-                submittedWord: currentWord
-            }))
-            console.log(currentWord);
-        } else {
-            return 0
-        }
-    }
+			if (gameState.columnPosition !== 3) {
+				setGameState(previousState => {
+					return { ...previousState,
+						columnPosition: previousState.columnPosition + 1,
+						submittedWord: currentWord,
+						grid: updatedGrid,
+						bufferLetter: previousState.grid[previousState.rowPosition][previousState.columnPosition+1].letter
+					}
+				});
+			} else {
+				setGameState(previousState => {
+					return { ...previousState,
+						columnPosition: previousState.columnPosition + 1,
+						submittedWord: "",
+						grid: updatedGrid,
+						bufferLetter: ""
+					}
+				});
+			}
+			
+			
+			// boxAddLetter("");
+			
+		} else {
+			return 0
+		}
+	}
 
-	getTodaysWord() {
+	//update grid cell when letter added/removed.
+	useEffect(() => {
 
+		if (gameState.columnPosition >= 0 && gameState.columnPosition <= 3) {
+			let updatedGrid = [...gameState.grid];
+			let updatedCell = updatedGrid[gameState.rowPosition][gameState.columnPosition];
+			// console.log(updatedGrid[this.state.rowPosition][this.state.columnPosition]);
+		
+			updatedCell.letter = gameState.bufferLetter;
+			updatedGrid[gameState.rowPosition][gameState.columnPosition] = updatedCell;
+		
+			setGameState(previousState => {
+				return { ...previousState,
+					grid: updatedGrid
+				}
+			});
+		}
+		
+	}, [gameState.submittedWord]);
+	
+	function getTodaysWord() {
+	
 		const fourLetterWordList = require('./constants/FourLetterWordList.ts')
-
+	
 		const wordCount = fourLetterWordList.length
 		const todaysIndex = Math.floor(Math.random() * wordCount);
-
+	
 		const todaysWord = fourLetterWordList[todaysIndex][0];
-
+	
 		console.log(`today's word is: ${todaysWord}`);
-
+	
 		return todaysWord;
 	}
-
-	assessWord(submittedWord, todaysWord) {
-
+	
+	function assessWord(submittedWord, todaysWord) {
+	
 		let submittedWordShort = submittedWord.replace('ـ', '');
-
-		for (let i = 0; i <= rowCount-1; i++) {
+	
+		for (let i = 0; i <= columnCount; i++) {
 			if (submittedWordShort[i] == todaysWord[i]) {
 				console.log(`Letter ${submittedWordShort[i]} is correct`);
 				//turn cell green
+				cellUpdateColor(3-i, "green");
 			} else if (submittedWordShort[i] !== todaysWord[i] && todaysWord.includes(submittedWordShort[i])) {
 				console.log(`Righ letter ${submittedWordShort[i]}, wrong cell`);
 				//turn cell yellow
+				cellUpdateColor(3-i, "yellow");
 			} else {
 				console.log(`Letter ${submittedWordShort[i]} is incorrect`);
 			}
 		}
-
+	
 		if (submittedWordShort == todaysWord) {
 			console.log("CORRECT WORD!");
-			return true;
-		}
+			
+			endGame = true;
+		}   
 	}
 
-	render() {
+	function cellUpdateColor(columnIndex, color) {
+		let updatedGrid = [...gameState.grid];
+		let updatedCell = updatedGrid[gameState.rowPosition][columnIndex];
+	
+		updatedCell.color = color;
+		updatedGrid[gameState.rowPosition][columnIndex] = updatedCell;
 		
-		/*useEffect(() => {
-			todaysWord = this.getTodaysWord();
-		}, []);
-		//doesnt work for class based component
-		*/
+		setGameState(previousState => {
+			return { ...previousState,
+				grid: updatedGrid
+			}
+		});
+	}
 
-		return (
-			<div className="App">
-				<header className="App-header">
-				<p>
-					daridle
-				</p>
-				</header>
-				{/* <Grid /> */}
+	return (
+		<div className="App">
+			<header className="App-header">
+			<p>
+				daridle
+			</p>
+			</header>
 
-				<div className='grid'>
-					<div className='row'>
-						<div className='cell'>
-							{this.state.box14}
-						</div>
-						<div className='cell'>
-							{this.state.box13}
-						</div>
-						<div className='cell'>
-							{this.state.box12}
-						</div>
-						<div className='cell'>
-							{this.state.box11}
-						</div>
+			{gameState.grid.map((grid, idx) => {
+				return(
+					<div className='row' key={idx}>
+						{grid.map((row, idx) => {
+							let cellStyle = {
+								color: '#000000',
+								width: '75px',
+								height: '75px',
+								alignItems: 'center',
+								justifyContent: 'center',
+								backgroundColor: row.color,
+								margin: '5px 2px 5px 2px',
+								textAlign: 'center',
+								fontSize: '60px',
+								paddingBottom: '10px'
+							}
+							return(
+								<div style={cellStyle} key={idx}>
+									{row.letter}
+								</div>
+							)
+						})}
 					</div>
-					<div className='row'>
-						<div className='cell'>
-							{this.state.box24}
-						</div>
-						<div className='cell'>
-							{this.state.box23}
-						</div>
-						<div className='cell'>
-							{this.state.box22}
-						</div>
-						<div className='cell'>
-							{this.state.box21}
-						</div>
-					</div>
-					<div className='row'>
-						<div className='cell'>
-							{this.state.box34}
-						</div>
-						<div className='cell'>
-							{this.state.box33}
-						</div>
-						<div className='cell'>
-							{this.state.box32}
-						</div>
-						<div className='cell'>
-							{this.state.box31}
-						</div>
-					</div>
-					<div className='row'>
-						<div className='cell'>
-							{this.state.box44}
-						</div>
-						<div className='cell'>
-							{this.state.box43}
-						</div>
-						<div className='cell'>
-							{this.state.box42}
-						</div>
-						<div className='cell'>
-							{this.state.box41}
-						</div>
-					</div>
-					<div className='row'>
-						<div className='cell'>
-							{this.state.box54}
-						</div>
-						<div className='cell'>
-							{this.state.box53}
-						</div>
-						<div className='cell'>
-							{this.state.box52}
-						</div>
-						<div className='cell'>
-							{this.state.box51}
-						</div>
-					</div>
+				)
+			})}
+
+			{/* <Keyboard /> */}
+
+			<div className='keyboard'>
+				<h1>{gameState.submittedWord}</h1>
+				<h2>{gameState.rowPosition}, {gameState.columnPosition}</h2>
+				<div className='keys1'>
+					<button onClick={() => readWord("ض")} type="submit" className='key'>ض</button>
+					<button onClick={() => readWord("ص")} type="submit" className='key'>ص</button>
+					<button onClick={() => readWord("ث")} type="submit" className='key'>ث</button>
+					<button onClick={() => readWord("ق")} type="submit" className='key'>ق</button>
+					<button onClick={() => readWord("ف")} type="submit" className='key'>ف</button>
+					<button onClick={() => readWord("غ")} type="submit" className='key'>غ</button>
+					<button onClick={() => readWord("ع")} type="submit" className='key'>ع</button>
+					<button onClick={() => readWord("ه")} type="submit" className='key'>ه</button>
+					<button onClick={() => readWord("خ")} type="submit" className='key'>خ</button>
+					<button onClick={() => readWord("ح")} type="submit" className='key'>ح</button>
+					<button onClick={() => readWord("ج")} type="submit" className='key'>ج</button>
+					<button onClick={() => readWord("چ")} type="submit" className='key'>چ</button>
 				</div>
-
-				{/* <Keyboard /> */}
-
-				<div className='keyboard'>
-					<h1>{this.state.submittedWord}</h1>
-					<h2>{this.state.rowPosition}, {this.state.columnPosition}</h2>
-					<div className='keys1'>
-						<button onClick={() => this.readWord("ض")} type="submit" className='key'>ض</button>
-						<button onClick={() => this.readWord("ص")} type="submit" className='key'>ص</button>
-						<button onClick={() => this.readWord("ث")} type="submit" className='key'>ث</button>
-						<button onClick={() => this.readWord("ق")} type="submit" className='key'>ق</button>
-						<button onClick={() => this.readWord("ف")} type="submit" className='key'>ف</button>
-						<button onClick={() => this.readWord("غ")} type="submit" className='key'>غ</button>
-						<button onClick={() => this.readWord("ع")} type="submit" className='key'>ع</button>
-						<button onClick={() => this.readWord("ه")} type="submit" className='key'>ه</button>
-						<button onClick={() => this.readWord("خ")} type="submit" className='key'>خ</button>
-						<button onClick={() => this.readWord("ح")} type="submit" className='key'>ح</button>
-						<button onClick={() => this.readWord("ج")} type="submit" className='key'>ج</button>
-						<button onClick={() => this.readWord("چ")} type="submit" className='key'>چ</button>
-					</div>
-					<div className='keys2'>
-						<button onClick={() => this.readWord("ش")} type="submit" className='key'>ش</button>
-						<button onClick={() => this.readWord("س")} type="submit" className='key'>س</button>
-						<button onClick={() => this.readWord("ی")} type="submit" className='key'>ی</button>
-						<button onClick={() => this.readWord("ب")} type="submit" className='key'>ب</button>
-						<button onClick={() => this.readWord("ل")} type="submit" className='key'>ل</button>
-						<button onClick={() => this.readWord("ا")} type="submit" className='key'>ا</button>
-						<button onClick={() => this.readWord("ت")} type="submit" className='key'>ت</button>
-						<button onClick={() => this.readWord("ن")} type="submit" className='key'>ن</button>
-						<button onClick={() => this.readWord("م")} type="submit" className='key'>م</button>
-						<button onClick={() => this.readWord("ک")} type="submit" className='key'>ک</button>
-						<button onClick={() => this.readWord("گ")} type="submit" className='key'>گ</button>
-					</div>
-					<div className='keys3'>
-						<button onClick={this.submitWord} type="submit" className='key'>Enter</button>
-						<button onClick={() => this.readWord("ظ")} type="submit" className='key'>ظ</button>
-						<button onClick={() => this.readWord("ط")} type="submit" className='key'>ط</button>
-						<button onClick={() => this.readWord("ز")} type="submit" className='key'>ز</button>
-						<button onClick={() => this.readWord("ر")} type="submit" className='key'>ر</button>
-						<button onClick={() => this.readWord("ذ")} type="submit" className='key'>ذ</button>
-						<button onClick={() => this.readWord("د")} type="submit" className='key'>د</button>
-						<button onClick={() => this.readWord("پ")} type="submit" className='key'>پ</button>
-						<button onClick={() => this.readWord("و")} type="submit" className='key'>و</button>
-						<button onClick={this.deleteLetter} type="submit" className='key'>Del</button>
-					</div>
+				<div className='keys2'>
+					<button onClick={() => readWord("ش")} type="submit" className='key'>ش</button>
+					<button onClick={() => readWord("س")} type="submit" className='key'>س</button>
+					<button onClick={() => readWord("ی")} type="submit" className='key'>ی</button>
+					<button onClick={() => readWord("ب")} type="submit" className='key'>ب</button>
+					<button onClick={() => readWord("ل")} type="submit" className='key'>ل</button>
+					<button onClick={() => readWord("ا")} type="submit" className='key'>ا</button>
+					<button onClick={() => readWord("ت")} type="submit" className='key'>ت</button>
+					<button onClick={() => readWord("ن")} type="submit" className='key'>ن</button>
+					<button onClick={() => readWord("م")} type="submit" className='key'>م</button>
+					<button onClick={() => readWord("ک")} type="submit" className='key'>ک</button>
+					<button onClick={() => readWord("گ")} type="submit" className='key'>گ</button>
+				</div>
+				<div className='keys3'>
+					<button onClick={submitWord} type="submit" className='key'>Enter</button>
+					<button onClick={() => readWord("ظ")} type="submit" className='key'>ظ</button>
+					<button onClick={() => readWord("ط")} type="submit" className='key'>ط</button>
+					<button onClick={() => readWord("ز")} type="submit" className='key'>ز</button>
+					<button onClick={() => readWord("ر")} type="submit" className='key'>ر</button>
+					<button onClick={() => readWord("ذ")} type="submit" className='key'>ذ</button>
+					<button onClick={() => readWord("د")} type="submit" className='key'>د</button>
+					<button onClick={() => readWord("پ")} type="submit" className='key'>پ</button>
+					<button onClick={() => readWord("و")} type="submit" className='key'>و</button>
+					<button onClick={deleteLetter} type="submit" className='key'>Del</button>
 				</div>
 			</div>
-		);
-	}
+		</div>
+	);
 }
 
 export default App;
