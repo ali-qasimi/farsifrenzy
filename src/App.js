@@ -57,7 +57,50 @@ function App() {
 				{letter: "", color: "darkgray"}
 			],
 		],
-		cellColor: "darkgray"
+		cellColor: "darkgray",
+		keys: [
+			[
+				{alphabet: "ض", color: "white"},
+				{alphabet: "ص", color: "white"},
+				{alphabet: "ث", color: "white"},
+				{alphabet: "ق", color: "white"},
+				{alphabet: "ف", color: "white"},
+				{alphabet: "غ", color: "white"},
+				{alphabet: "ع", color: "white"},
+				{alphabet: "ه", color: "white"},
+				{alphabet: "خ", color: "white"},
+				{alphabet: "ح", color: "white"},
+				{alphabet: "ج", color: "white"},
+				{alphabet: "چ", color: "white"}
+
+			],
+			[
+				{alphabet: "ش", color: "white"},
+				{alphabet: "س", color: "white"},
+				{alphabet: "ی", color: "white"},
+				{alphabet: "ب", color: "white"},
+				{alphabet: "ل", color: "white"},
+				{alphabet: "ا", color: "white"},
+				{alphabet: "آ", color: "white"},
+				{alphabet: "ت", color: "white"},
+				{alphabet: "ن", color: "white"},
+				{alphabet: "م", color: "white"},
+				{alphabet: "ک", color: "white"},
+				{alphabet: "گ", color: "white"}
+			],
+			[
+				{alphabet: "ظ", color: "white"},
+				{alphabet: "ط", color: "white"},
+				{alphabet: "ز", color: "white"},
+				{alphabet: "ژ", color: "white"},
+				{alphabet: "ر", color: "white"},
+				{alphabet: "ذ", color: "white"},
+				{alphabet: "د", color: "white"},
+				{alphabet: "پ", color: "white"},
+				{alphabet: "و", color: "white"},
+			]
+
+		]
 	})
 
 	function readWord(letter) {
@@ -185,6 +228,7 @@ function App() {
 				cellUpdateColor(3-i, "yellow");
 			} else {
 				console.log(`Letter ${submittedWordShort[i]} is incorrect`);
+				updateKeyboard(submittedWordShort[i])
 			}
 		}
 	
@@ -205,6 +249,29 @@ function App() {
 		setGameState(previousState => {
 			return { ...previousState,
 				grid: updatedGrid
+			}
+		});
+	}
+
+	function updateKeyboard(keyLetter) {
+		let updatedKeyboard = [...gameState.keys];
+
+		for (var keyRow = 0; keyRow <= 2; keyRow++ ) {
+			var keyIndex = updatedKeyboard[keyRow].findIndex(key => key.alphabet == keyLetter);
+
+			if (keyIndex != -1) {
+				console.log(`index of ${keyLetter} is ${keyRow},${keyIndex}`)
+				break;
+			} else { continue; }
+		}
+		
+		let updatedkey = updatedKeyboard[keyRow][keyIndex]
+		updatedkey.color = 'grey';
+		updatedKeyboard[keyRow][keyIndex] = updatedkey;
+
+		setGameState(previousState => {
+			return { ...previousState,
+				keys: updatedKeyboard
 			}
 		});
 	}
@@ -243,48 +310,61 @@ function App() {
 				)
 			})}
 
-			{/* <Keyboard /> */}
-
 			<div className='keyboard'>
 				<h1>{gameState.submittedWord}</h1>
 				<h2>{gameState.rowPosition}, {gameState.columnPosition}</h2>
-				<div className='keys1'>
-					<button onClick={() => readWord("ض")} type="submit" className='key'>ض</button>
-					<button onClick={() => readWord("ص")} type="submit" className='key'>ص</button>
-					<button onClick={() => readWord("ث")} type="submit" className='key'>ث</button>
-					<button onClick={() => readWord("ق")} type="submit" className='key'>ق</button>
-					<button onClick={() => readWord("ف")} type="submit" className='key'>ف</button>
-					<button onClick={() => readWord("غ")} type="submit" className='key'>غ</button>
-					<button onClick={() => readWord("ع")} type="submit" className='key'>ع</button>
-					<button onClick={() => readWord("ه")} type="submit" className='key'>ه</button>
-					<button onClick={() => readWord("خ")} type="submit" className='key'>خ</button>
-					<button onClick={() => readWord("ح")} type="submit" className='key'>ح</button>
-					<button onClick={() => readWord("ج")} type="submit" className='key'>ج</button>
-					<button onClick={() => readWord("چ")} type="submit" className='key'>چ</button>
+				<div className='keys'>
+					
+					{gameState.keys[0].map((key,idx) => {
+						let keyStyle = {
+							minHeight: '40px',
+							minWidth: '40px',
+							textAlign: 'center',
+							fontSize: '150%',
+							fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+							padding: '0',
+							margin: '1px',
+							backgroundColor: key.color,
+						}
+						return(
+							<button onClick={() => key.color == 'white' ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
+						)
+					})}
+				</div>
+				<div className='keys'>
+					{gameState.keys[1].map((key,idx) => {
+						let keyStyle = {
+							minHeight: '40px',
+							minWidth: '40px',
+							textAlign: 'center',
+							fontSize: '150%',
+							fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+							padding: '0',
+							margin: '1px',
+							backgroundColor: key.color,
+						}
+						return(
+							<button onClick={() => key.color == 'white' ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
+						)
+					})}
 				</div>
 				<div className='keys2'>
-					<button onClick={() => readWord("ش")} type="submit" className='key'>ش</button>
-					<button onClick={() => readWord("س")} type="submit" className='key'>س</button>
-					<button onClick={() => readWord("ی")} type="submit" className='key'>ی</button>
-					<button onClick={() => readWord("ب")} type="submit" className='key'>ب</button>
-					<button onClick={() => readWord("ل")} type="submit" className='key'>ل</button>
-					<button onClick={() => readWord("ا")} type="submit" className='key'>ا</button>
-					<button onClick={() => readWord("ت")} type="submit" className='key'>ت</button>
-					<button onClick={() => readWord("ن")} type="submit" className='key'>ن</button>
-					<button onClick={() => readWord("م")} type="submit" className='key'>م</button>
-					<button onClick={() => readWord("ک")} type="submit" className='key'>ک</button>
-					<button onClick={() => readWord("گ")} type="submit" className='key'>گ</button>
-				</div>
-				<div className='keys3'>
 					<button onClick={submitWord} type="submit" className='key'>Enter</button>
-					<button onClick={() => readWord("ظ")} type="submit" className='key'>ظ</button>
-					<button onClick={() => readWord("ط")} type="submit" className='key'>ط</button>
-					<button onClick={() => readWord("ز")} type="submit" className='key'>ز</button>
-					<button onClick={() => readWord("ر")} type="submit" className='key'>ر</button>
-					<button onClick={() => readWord("ذ")} type="submit" className='key'>ذ</button>
-					<button onClick={() => readWord("د")} type="submit" className='key'>د</button>
-					<button onClick={() => readWord("پ")} type="submit" className='key'>پ</button>
-					<button onClick={() => readWord("و")} type="submit" className='key'>و</button>
+					{gameState.keys[2].map((key,idx) => {
+						let keyStyle = {
+							minHeight: '40px',
+							minWidth: '40px',
+							textAlign: 'center',
+							fontSize: '150%',
+							fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+							padding: '0',
+							margin: '1px',
+							backgroundColor: key.color,
+						}
+						return(
+							<button onClick={() => key.color == 'white' ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
+						)
+					})}
 					<button onClick={deleteLetter} type="submit" className='key'>Del</button>
 				</div>
 			</div>

@@ -78,9 +78,10 @@
   margin: 1px;
 }
 
+.keys0
 .keys1
 .keys2
-.keys3 {
+.keys {
   display: flex;
   flex-direction: row;
   justify-content: center;
