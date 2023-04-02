@@ -3,20 +3,27 @@ import './App.css';
 import Grid from './component/grid/grid';
 import Keyboard from './component/keyboard/keyboard';
 import { flushSync } from 'react-dom';
+import Overlay from "react-overlay-component";
 
-var todaysWord;
+var todaysWord = {
+	word: "",
+	pronunciation: "",
+	meaning: "",
+	exampleFarsi: "",
+	examplePronunciation: "",
+	exampleEnglish: ""
+}
+
 const columnCount = 3; 
 const rowCount = 4;
 var endGame = false;
-
-/*componentDidMount() {
-	todaysWord = this.getTodaysWord();
-}*/
+var gameWon = false;
 
 function App() {
 
 	useEffect(() => {
 		todaysWord = getTodaysWord();
+		setInstructionOverlay(true);
 	}, []);
 		
 	const [gameState, setGameState] = useState({
@@ -27,34 +34,34 @@ function App() {
 		moveCount: 0,
 		grid: [
 			[
-				{letter: "", color: "darkgray"},
-				{letter: "", color: "darkgray"},
-				{letter: "", color: "darkgray"},
-				{letter: "", color: "darkgray"}
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"}
 			],
 			[
-				{letter: "", color: "darkgray"},
-				{letter: "", color: "darkgray"},
-				{letter: "", color: "darkgray"},
-				{letter: "", color: "darkgray"}
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"}
 			],
 			[
-				{letter: "", color: "darkgray"},
-				{letter: "", color: "darkgray"},
-				{letter: "", color: "darkgray"},
-				{letter: "", color: "darkgray"}
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"}
 			],
 			[
-				{letter: "", color: "darkgray"},
-				{letter: "", color: "darkgray"},
-				{letter: "", color: "darkgray"},
-				{letter: "", color: "darkgray"}
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"}
 			],
 			[
-				{letter: "", color: "darkgray"},
-				{letter: "", color: "darkgray"},
-				{letter: "", color: "darkgray"},
-				{letter: "", color: "darkgray"}
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
+				{letter: "", color: "darkgray", flip: "rotateY(0deg)"}
 			],
 		],
 		cellColor: "darkgray",
@@ -103,6 +110,23 @@ function App() {
 		]
 	})
 
+	//overlays:
+	const [isInstructionOverlayOpen, setInstructionOverlay] = useState(false);
+	const closeInstructionOverlay = () => setInstructionOverlay(false);
+
+	const [isGameOverOverlayOpen, setGameOverOverlay] = useState(false);
+	const closeGameOverOverlay = () => setGameOverOverlay(false);
+
+	const overlayConfig = {
+		animate: true,
+		// top: `5em`,
+		// clickDismiss: true,
+		// escapeDismiss: false,
+		// focusOutline: false,
+		// contentClass: "",
+	};
+
+
 	function readWord(letter) {
 		if (gameState.columnPosition !== 0 && gameState.rowPosition <= 4) {
 			let currentWord = gameState.submittedWord;
@@ -127,7 +151,7 @@ function App() {
 	
 		if (gameState.rowPosition <= rowCount && gameState.columnPosition == 0) {
 			console.log('submitting word');
-			assessWord(gameState.submittedWord, todaysWord);
+			assessWord(gameState.submittedWord, todaysWord.word);
 			
 			setGameState(previousState => {
 				return { ...previousState,
@@ -200,15 +224,25 @@ function App() {
 	}, [gameState.submittedWord]);
 	
 	function getTodaysWord() {
-	
+		let todaysWord = {
+			word: "",
+			pronunciation: "",
+			meaning: "",
+			example: ""
+		}
 		const fourLetterWordList = require('./constants/FourLetterWordList.ts')
 	
 		const wordCount = fourLetterWordList.length
 		const todaysIndex = Math.floor(Math.random() * wordCount);
 	
-		const todaysWord = fourLetterWordList[todaysIndex][0];
+		todaysWord.word = fourLetterWordList[todaysIndex][0];
+		todaysWord.pronunciation = fourLetterWordList[todaysIndex][1];
+		todaysWord.meaning = fourLetterWordList[todaysIndex][2];
+		todaysWord.exampleFarsi = fourLetterWordList[todaysIndex][3];
+		todaysWord.examplePronunciation = fourLetterWordList[todaysIndex][4];
+		todaysWord.exampleEnglish = fourLetterWordList[todaysIndex][5];
 	
-		console.log(`today's word is: ${todaysWord}`);
+		console.log(`today's word is: ${todaysWord.word}`);
 	
 		return todaysWord;
 	}
@@ -221,30 +255,63 @@ function App() {
 			if (submittedWordShort[i] == todaysWord[i]) {
 				console.log(`Letter ${submittedWordShort[i]} is correct`);
 				//turn cell green
-				cellUpdateColor(3-i, "green");
+				cellUpdateColor(3-i, "#568203");
+				updateKeyboard(submittedWordShort[i], '#568203');
 			} else if (submittedWordShort[i] !== todaysWord[i] && todaysWord.includes(submittedWordShort[i])) {
 				console.log(`Righ letter ${submittedWordShort[i]}, wrong cell`);
 				//turn cell yellow
 				cellUpdateColor(3-i, "yellow");
+				updateKeyboard(submittedWordShort[i], 'yellow');
 			} else {
 				console.log(`Letter ${submittedWordShort[i]} is incorrect`);
-				updateKeyboard(submittedWordShort[i])
+				updateKeyboard(submittedWordShort[i], 'grey');
 			}
 		}
+		
+		flipRow();
 	
 		if (submittedWordShort == todaysWord) {
 			console.log("CORRECT WORD!");
 			
 			endGame = true;
+			gameWon = true;
+
+			setGameOverOverlay(true);
 		}   
 	}
 
 	function cellUpdateColor(columnIndex, color) {
 		let updatedGrid = [...gameState.grid];
+		// let updatedRow = updatedGrid[gameState.rowPosition];
 		let updatedCell = updatedGrid[gameState.rowPosition][columnIndex];
 	
 		updatedCell.color = color;
 		updatedGrid[gameState.rowPosition][columnIndex] = updatedCell;
+
+		
+		// updatedRow.forEach((cell) => {
+		// 	//flip entire row
+		// 	cell.flip = "rotateY(180deg)"
+		// });
+		// updatedGrid[gameState.rowPosition] = updatedRow;
+		
+		setGameState(previousState => {
+			return { ...previousState,
+				grid: updatedGrid
+			}
+		});
+
+	}
+
+	function flipRow() {
+		let updatedGrid = [...gameState.grid];
+		let updatedRow = updatedGrid[gameState.rowPosition];
+		
+		updatedRow.forEach((cell) => {
+			//flip entire row
+			cell.flip = "rotateY(180deg)"
+		});
+		updatedGrid[gameState.rowPosition] = updatedRow;
 		
 		setGameState(previousState => {
 			return { ...previousState,
@@ -253,7 +320,7 @@ function App() {
 		});
 	}
 
-	function updateKeyboard(keyLetter) {
+	function updateKeyboard(keyLetter, colour) {
 		let updatedKeyboard = [...gameState.keys];
 
 		for (var keyRow = 0; keyRow <= 2; keyRow++ ) {
@@ -266,7 +333,7 @@ function App() {
 		}
 		
 		let updatedkey = updatedKeyboard[keyRow][keyIndex]
-		updatedkey.color = 'grey';
+		updatedkey.color = colour;
 		updatedKeyboard[keyRow][keyIndex] = updatedkey;
 
 		setGameState(previousState => {
@@ -279,16 +346,37 @@ function App() {
 	return (
 		<div className="App">
 			<header className="App-header">
-			<p>
+			<h1>
 				daridle
-			</p>
+			</h1>
 			</header>
 
 			{gameState.grid.map((grid, idx) => {
 				return(
 					<div className='row' key={idx}>
 						{grid.map((row, idx) => {
-							let cellStyle = {
+							
+							let cellStyleParent = {
+								position: 'relative',
+								transition: 'transform 2s',
+  								transformStyle: 'preserve-3d',
+								transform: row.flip,
+							}
+							let cellStyleFront = {
+								position: 'absolute',
+								color: '#000000',
+								width: '75px',
+								height: '75px',
+								alignItems: 'center',
+								justifyContent: 'center',
+								backgroundColor: 'darkgray',
+								margin: '5px 2px 5px 2px',
+								textAlign: 'center',
+								fontSize: '60px',
+								paddingBottom: '10px',
+  								backfaceVisibility: 'hidden',
+							}
+							let cellStyleBack = {
 								color: '#000000',
 								width: '75px',
 								height: '75px',
@@ -298,11 +386,19 @@ function App() {
 								margin: '5px 2px 5px 2px',
 								textAlign: 'center',
 								fontSize: '60px',
-								paddingBottom: '10px'
+								paddingBottom: '10px',
+								backfaceVisibility: 'hidden',
+								transform: 'rotateY(180deg)'
 							}
+
 							return(
-								<div style={cellStyle} key={idx}>
-									{row.letter}
+								<div key={idx} style={cellStyleParent}>
+									<div style={cellStyleFront} >
+										{row.letter}
+									</div>
+									<div style={cellStyleBack}>
+										{row.letter}
+									</div>
 								</div>
 							)
 						})}
@@ -311,23 +407,25 @@ function App() {
 			})}
 
 			<div className='keyboard'>
-				<h1>{gameState.submittedWord}</h1>
-				<h2>{gameState.rowPosition}, {gameState.columnPosition}</h2>
+				{/* <h1>{gameState.submittedWord}</h1> */}
+				{/* <h2>{gameState.rowPosition}, {gameState.columnPosition}</h2> */}
 				<div className='keys'>
 					
 					{gameState.keys[0].map((key,idx) => {
 						let keyStyle = {
 							minHeight: '40px',
-							minWidth: '40px',
+							minWidth: '7vw',
 							textAlign: 'center',
 							fontSize: '150%',
 							fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
 							padding: '0',
 							margin: '1px',
 							backgroundColor: key.color,
+							borderRadius: '1vw',
+							border: 'none'
 						}
 						return(
-							<button onClick={() => key.color == 'white' ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
+							<button onClick={() => endGame == false ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
 						)
 					})}
 				</div>
@@ -335,16 +433,18 @@ function App() {
 					{gameState.keys[1].map((key,idx) => {
 						let keyStyle = {
 							minHeight: '40px',
-							minWidth: '40px',
+							minWidth: '7vw',
 							textAlign: 'center',
 							fontSize: '150%',
 							fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
 							padding: '0',
 							margin: '1px',
 							backgroundColor: key.color,
+							borderRadius: '20%',
+							border: 'none'
 						}
 						return(
-							<button onClick={() => key.color == 'white' ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
+							<button onClick={() => endGame == false ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
 						)
 					})}
 				</div>
@@ -353,21 +453,53 @@ function App() {
 					{gameState.keys[2].map((key,idx) => {
 						let keyStyle = {
 							minHeight: '40px',
-							minWidth: '40px',
+							minWidth: '7vw',
 							textAlign: 'center',
 							fontSize: '150%',
 							fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
 							padding: '0',
 							margin: '1px',
 							backgroundColor: key.color,
+							borderRadius: '20%',
+							border: 'none'
 						}
 						return(
-							<button onClick={() => key.color == 'white' ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
+							<button onClick={() => endGame == false ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
 						)
 					})}
 					<button onClick={deleteLetter} type="submit" className='key'>Del</button>
 				</div>
 			</div>
+
+			<Overlay configs={overlayConfig} isOpen={isInstructionOverlayOpen} closeOverlay={closeInstructionOverlay} >
+				<h2>Welcome to Daridle!</h2>
+				<h3> Guess today's word in 5 tries</h3>
+				<p className='instructionsOverlay'>
+					For a 4-letter word you guess, each tile colour will change to: <br></br><br></br>
+					- Green: Correct Letter, at the correct tile <br></br>
+					- Yellow: Correct letter, at the wrong tile <br></br>
+					- Grey: Wrong letter <br></br>
+				</p>
+				<button className='startButton' onClick={() => {setInstructionOverlay(false);}}>
+					Start
+				</button>
+			</Overlay>
+
+			<Overlay configs={overlayConfig} isOpen={isGameOverOverlayOpen} closeOverlay={closeGameOverOverlay} >
+				<h2>CORRECT WORD!</h2>
+				<h3>{todaysWord.word}</h3>
+				<span className='instructionsOverlay'>
+					<center><i>{todaysWord.pronunciation}</i></center>
+					<center>{todaysWord.meaning}</center> <br></br>
+					Example: <br></br>
+					"{todaysWord.exampleFarsi}" <br></br>
+					<i>{todaysWord.examplePronunciation}</i><br></br>
+					"{todaysWord.exampleEnglish}" <br></br><br></br>
+				</span>
+				<button className='startButton' onClick={() => {setGameOverOverlay(false);}}>
+					Close
+				</button>
+			</Overlay>
 		</div>
 	);
 }

@@ -76,6 +76,8 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 0;
   margin: 1px;
+  border-radius: 1vw;
+  border: none;
 }
 
 .keys0
@@ -90,4 +92,20 @@
   height: 50px;
   width: 50px;
   margin-top: 20px;
+}
+
+.instructionsOverlay {
+  text-align: left;
+}
+
+.startButton {
+  height: 10%;
+  width: 50%;
+  font-size: 3vh;
+  background-color: #568203;
+  color: aliceblue;
+}
+
+.flipCells {
+  transform: rotatY(180deg);
 }
