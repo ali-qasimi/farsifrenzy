@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# answers in plaintext
+./constants/FourLetterWordListDecoded.txt

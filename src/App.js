@@ -4,6 +4,8 @@ import Grid from './component/grid/grid';
 import Keyboard from './component/keyboard/keyboard';
 import { flushSync } from 'react-dom';
 import Overlay from "react-overlay-component";
+import {Buffer} from 'buffer';
+import RawWordList from './constants/FourLetterWordListEncoded.txt'
 
 var todaysWord = {
 	word: "",
@@ -16,13 +18,42 @@ var todaysWord = {
 
 const columnCount = 3; 
 const rowCount = 4;
-var endGame = false;
+// var endGame = false;
 var gameWon = false;
+var gameStateFromLocalStorage;
+var solution;
 
 function App() {
 
 	useEffect(() => {
-		todaysWord = getTodaysWord();
+		async function getTodaysWord() {
+
+			const fourLetterWordList = require('./constants/FourLetterWordList.ts')
+			// const fourLetterWordListEncoded = require('./constants/FourLetterWordListEncoded.txt')
+			const response = await fetch(RawWordList);
+			const fourLetterWordListEncoded = await response.text();
+			
+			// console.log(`${fourLetterWordListEncoded}`);
+	
+			let buffer = new Buffer.from(fourLetterWordListEncoded, 'base64');
+			let fourLetterWordListDecoded = buffer.toString('utf-8');
+			fourLetterWordListDecoded = JSON.parse("[" + fourLetterWordListDecoded + "]");
+	
+			// console.log(`fourLetterWordListDecoded: ${fourLetterWordListDecoded}`);
+	
+			const epochMs = new Date('April 1, 2023 00:00:00').valueOf();
+			const now = Date.now();
+			const msInDay = 86400000;
+			const index = Math.floor((now - epochMs) / msInDay);
+			const nextday = (index + 1) * msInDay + epochMs;
+	
+			todaysWord = fourLetterWordListDecoded[0][index];
+			console.log(`word: ${todaysWord.word}, pronunciation: ${todaysWord.pronunciation}, meaning: ${todaysWord.meaning}, exampleFarsi: ${todaysWord.exampleFarsi}`);
+
+		}
+
+		getTodaysWord();
+		// todaysWord = getTodaysWord();
 		setInstructionOverlay(true);
 	}, []);
 		
@@ -32,6 +63,7 @@ function App() {
 		submittedWord: "",
 		bufferLetter: "",
 		moveCount: 0,
+		endGame: false,
 		grid: [
 			[
 				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
@@ -109,6 +141,28 @@ function App() {
 
 		]
 	})
+
+	const [playerState, setPlayerState] = useState({
+		playCount: 0,
+		winCount: 0,
+		CurrentPlayStreak: 0,
+		MaxPlayStreak: 0,
+		playedYesterday: false
+	}) 
+
+	//read from local storage on first render:
+	useEffect(() => {
+
+		try {
+			gameStateFromLocalStorage = JSON.parse(localStorage.getItem('gameState'));
+			if (gameStateFromLocalStorage) {
+				setGameState(gameStateFromLocalStorage);
+			}
+		}
+		catch(err) {
+			console.log('Local Storage is Clean');
+		}
+	}, []);
 
 	//overlays:
 	const [isInstructionOverlayOpen, setInstructionOverlay] = useState(false);
@@ -223,12 +277,15 @@ function App() {
 		
 	}, [gameState.submittedWord]);
 	
+	/* //initial method, uses plain text file and can't get same word throughout the day.
 	function getTodaysWord() {
 		let todaysWord = {
 			word: "",
 			pronunciation: "",
 			meaning: "",
-			example: ""
+			exampleFarsi: "",
+			examplePronunciation: "",
+			exampleEnglish: ""
 		}
 		const fourLetterWordList = require('./constants/FourLetterWordList.ts')
 	
@@ -246,6 +303,7 @@ function App() {
 	
 		return todaysWord;
 	}
+	*/
 	
 	function assessWord(submittedWord, todaysWord) {
 	
@@ -269,15 +327,40 @@ function App() {
 		}
 		
 		flipRow();
-	
-		if (submittedWordShort == todaysWord) {
-			console.log("CORRECT WORD!");
-			
-			endGame = true;
-			gameWon = true;
 
-			setGameOverOverlay(true);
-		}   
+		setPlayerState(previousState => {
+			return {...previousState,
+				playCount: previousState.playCount+1
+			}
+		})
+	
+		if (submittedWord.length == todaysWord.length) {
+
+			if (submittedWordShort == todaysWord || gameState.rowPosition == rowCount) {
+				
+				if (submittedWordShort == todaysWord) {
+					console.log("CORRECT WORD!");
+					gameWon = true;
+				}
+				
+				// endGame = true;
+				setGameState(previousState => {
+					return {...previousState,
+						endGame: true
+					}
+				});
+				setGameOverOverlay(true);
+			}
+
+			/*if (gameState.rowPosition == rowCount) {
+				setGameState(previousState => {
+					return {...previousState,
+						endGame: true
+					}
+				});
+				setGameOverOverlay(true);
+			}*/
+		}
 	}
 
 	function cellUpdateColor(columnIndex, color) {
@@ -342,6 +425,10 @@ function App() {
 			}
 		});
 	}
+
+	useEffect(() => {
+		localStorage.setItem('gameState', JSON.stringify(gameState));
+	}, [gameState.submittedWord, gameState.endGame]);
 
 	return (
 		<div className="App">
@@ -425,7 +512,7 @@ function App() {
 							border: 'none'
 						}
 						return(
-							<button onClick={() => endGame == false ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
+							<button onClick={() => gameState.endGame == false ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
 						)
 					})}
 				</div>
@@ -444,7 +531,7 @@ function App() {
 							border: 'none'
 						}
 						return(
-							<button onClick={() => endGame == false ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
+							<button onClick={() => gameState.endGame == false ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
 						)
 					})}
 				</div>
@@ -464,7 +551,7 @@ function App() {
 							border: 'none'
 						}
 						return(
-							<button onClick={() => endGame == false ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
+							<button onClick={() => gameState.endGame == false ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
 						)
 					})}
 					<button onClick={deleteLetter} type="submit" className='key'>Del</button>
@@ -486,7 +573,7 @@ function App() {
 			</Overlay>
 
 			<Overlay configs={overlayConfig} isOpen={isGameOverOverlayOpen} closeOverlay={closeGameOverOverlay} >
-				<h2>CORRECT WORD!</h2>
+				<h2>{gameWon ? 'Correct Word!' : 'Good Luck Tomorrow'}</h2>
 				<h3>{todaysWord.word}</h3>
 				<span className='instructionsOverlay'>
 					<center><i>{todaysWord.pronunciation}</i></center>

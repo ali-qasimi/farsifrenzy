@@ -1,0 +1,14 @@
+[
+    {"word": "سلام", "pronunciation": "Salam", "meaning": "Hi, Hello", "exampleFarsi": "سلام بر شما", "examplePronunciation": "Salam bar shoma", "exampleEnglish": "Hello to you"},
+    {"word": "چطور", "pronunciation": "Chaetor", "meaning": "How", "exampleFarsi": "چطور هستی؟", "examplePronunciation": "Chetor hasti?", "exampleEnglish": "How are you?"},
+    {"word": "هزار", "pronunciation": "Hazar", "meaning": "Thousand", "exampleFarsi": "هزار و یک شب", "examplePronunciation": "hazaro yak shab", "exampleEnglish": "A thousand and one nights"},
+    {"word": "بیان", "pronunciation": "Bayan", "meaning": "Describe", "exampleFarsi": "لطفا این را به من بیان کنید؟", "examplePronunciation": "Lotfan in ra ba man bayan konid", "exampleEnglish": "Please explain this to me"},
+    {"word": "معلم", "pronunciation": "Mo-alem", "meaning": "Teacher", "exampleFarsi": "یک معلم تاریخ", "examplePronunciation": "Yak moalem-e tarikh", "exampleEnglish": "A history teacher"},
+    {"word": "صلاح", "pronunciation": "Salah", "meaning": "Advisable, moral soundness ", "exampleFarsi": "صلاح می‌دانم که پول پس‌انداز کنم", "examplePronunciation": "Salah mae-danam kae pool pas andaz konam", "exampleEnglish": "I see it advisable to save money"},
+    {"word": "زبان", "pronunciation": "Zaban", "meaning": "Tongue, language", "exampleFarsi": "من زبان فارسی را بلدم", "examplePronunciation": "Man zabane farsi ra baladam", "exampleEnglish": "I know the farsi language"},
+    {"word": "شروع", "pronunciation": "Shoro", "meaning": "Begin, start, commence", "exampleFarsi": "فردا شروع بهار است", "examplePronunciation": "Fardo shoro-ae bahar ast", "exampleEnglish": "Tomorrow is the start of spring"},
+    {"word": "صحیح", "pronunciation": "Sahih", "meaning": "Correct", "exampleFarsi": "شما درست هستید", "examplePronunciation": "Shoma dorost hastid", "exampleEnglish": "You are correct"},
+    {"word": "آشنا", "pronunciation": "Ashna", "meaning": "Familiar, Known", "exampleFarsi": "این شهر به من آشناست", "examplePronunciation": "In shahr ba man ashna-st", "exampleEnglish": "This city is familiar to me"},
+    {"word": "کتاب", "pronunciation": "Kaetob", "meaning": "Book", "exampleFarsi": "من کتاب بادبادک باز را می‌خوانم", "examplePronunciation": "Man kaetob-ae baadbaadak baz ra mae-khonam", "exampleEnglish": "I am reading the Kite Runner book"},
+    {"word": "جواب", "pronunciation": "Jawab", "meaning": "Answer, Response", "exampleFarsi": "احمد تیلفون را جواب داد", "examplePronunciation": "Ahmad telephone ra jawab dad", "exampleEnglish": "Ahmad answered the phone"}
+]
