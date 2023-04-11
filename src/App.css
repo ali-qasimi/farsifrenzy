@@ -109,3 +109,20 @@
 .flipCells {
   transform: rotatY(180deg);
 }
+
+.menu-icons {
+  height: max-content;
+  width: max-content;
+  position: absolute;
+  right: 3px;
+}
+
+.menu-icon {
+  height: 10vw;
+  width: 10vw;
+  font-size: 150%;
+  color: aliceblue;
+  background-color: transparent;
+  border-color: transparent;
+  padding: 1px 1px 1px 1px !important;
+}

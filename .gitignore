@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # answers in plaintext
-./constants/FourLetterWordListDecoded.txt
+/src/constants/FourLetterWordListDecoded.txt

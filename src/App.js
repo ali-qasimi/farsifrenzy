@@ -6,6 +6,7 @@ import { flushSync } from 'react-dom';
 import Overlay from "react-overlay-component";
 import {Buffer} from 'buffer';
 import RawWordList from './constants/FourLetterWordListEncoded.txt'
+import { Icon } from '@iconify/react'
 
 var todaysWord = {
 	word: "",
@@ -13,19 +14,47 @@ var todaysWord = {
 	meaning: "",
 	exampleFarsi: "",
 	examplePronunciation: "",
-	exampleEnglish: ""
+	exampleEnglish: "",
+	todaysIndex: 0
 }
 
 const columnCount = 3; 
 const rowCount = 4;
 // var endGame = false;
 var gameWon = false;
-var gameStateFromLocalStorage;
 var solution;
 
 function App() {
 
 	useEffect(() => {
+		
+		getTodaysIndex();
+
+		//load states from local storage:
+		try {
+			let gameStateFromLocalStorage = JSON.parse(localStorage.getItem('gameState'));
+			if (gameStateFromLocalStorage) {
+				//only load if it's same day.
+				if (gameStateFromLocalStorage.todaysIndex == todaysWord.todaysIndex) {
+					setGameState(gameStateFromLocalStorage);
+				} else {
+					setGameState(previousState => {
+						return { ...previousState,
+							todaysIndex: todaysWord.todaysIndex
+						}	
+					});
+				}
+			}
+
+			let playerStateFromLocalStorage = JSON.parse(localStorage.getItem('playerState'));
+			if (playerStateFromLocalStorage) {
+				setPlayerState(playerStateFromLocalStorage);
+			}
+		}
+		catch(err) {
+			console.log('Local Storage is Clean');
+		}
+
 		async function getTodaysWord() {
 
 			const fourLetterWordList = require('./constants/FourLetterWordList.ts')
@@ -41,13 +70,14 @@ function App() {
 	
 			// console.log(`fourLetterWordListDecoded: ${fourLetterWordListDecoded}`);
 	
-			const epochMs = new Date('April 1, 2023 00:00:00').valueOf();
-			const now = Date.now();
-			const msInDay = 86400000;
-			const index = Math.floor((now - epochMs) / msInDay);
-			const nextday = (index + 1) * msInDay + epochMs;
-	
-			todaysWord = fourLetterWordListDecoded[0][index];
+			// const epochMs = new Date('April 1, 2023 00:00:00').valueOf();
+			// const now = Date.now();
+			// const msInDay = 86400000;
+			// const index = Math.floor((now - epochMs) / msInDay);
+			// const nextday = (index + 1) * msInDay + epochMs;
+			todaysWord = {...
+				fourLetterWordListDecoded[0][todaysWord.todaysIndex]
+			};
 			console.log(`word: ${todaysWord.word}, pronunciation: ${todaysWord.pronunciation}, meaning: ${todaysWord.meaning}, exampleFarsi: ${todaysWord.exampleFarsi}`);
 
 		}
@@ -64,6 +94,7 @@ function App() {
 		bufferLetter: "",
 		moveCount: 0,
 		endGame: false,
+		todaysIndex: 0,
 		grid: [
 			[
 				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
@@ -145,24 +176,40 @@ function App() {
 	const [playerState, setPlayerState] = useState({
 		playCount: 0,
 		winCount: 0,
-		CurrentPlayStreak: 0,
-		MaxPlayStreak: 0,
-		playedYesterday: false
+		currentPlayStreak: 0,
+		maxPlayStreak: 0,
+		playedYesterday: false, //for tomorrow
 	}) 
 
 	//read from local storage on first render:
-	useEffect(() => {
+	/*useEffect(() => {
+
+		getTodaysIndex();
 
 		try {
-			gameStateFromLocalStorage = JSON.parse(localStorage.getItem('gameState'));
+			let gameStateFromLocalStorage = JSON.parse(localStorage.getItem('gameState'));
 			if (gameStateFromLocalStorage) {
-				setGameState(gameStateFromLocalStorage);
+				//only load if it's same day.
+				if (gameStateFromLocalStorage.todaysIndex == todaysWord.todaysIndex) {
+					setGameState(gameStateFromLocalStorage);
+				} else {
+					setGameState(previousState => {
+						return { ...previousState,
+							todaysIndex: todaysWord.todaysIndex
+						}	
+					});
+				}
+			}
+
+			let playerStateFromLocalStorage = JSON.parse(localStorage.getItem('playerState'));
+			if (playerStateFromLocalStorage) {
+				setPlayerState(playerStateFromLocalStorage);
 			}
 		}
 		catch(err) {
 			console.log('Local Storage is Clean');
 		}
-	}, []);
+	}, []);*/
 
 	//overlays:
 	const [isInstructionOverlayOpen, setInstructionOverlay] = useState(false);
@@ -180,6 +227,14 @@ function App() {
 		// contentClass: "",
 	};
 
+	function getTodaysIndex() {
+		const epochMs = new Date('April 1, 2023 00:00:00').valueOf();
+		const now = Date.now();
+		const msInDay = 86400000;
+		const index = Math.floor((now - epochMs) / msInDay);
+
+		todaysWord.todaysIndex = index;
+	}
 
 	function readWord(letter) {
 		if (gameState.columnPosition !== 0 && gameState.rowPosition <= 4) {
@@ -327,12 +382,6 @@ function App() {
 		}
 		
 		flipRow();
-
-		setPlayerState(previousState => {
-			return {...previousState,
-				playCount: previousState.playCount+1
-			}
-		})
 	
 		if (submittedWord.length == todaysWord.length) {
 
@@ -341,6 +390,11 @@ function App() {
 				if (submittedWordShort == todaysWord) {
 					console.log("CORRECT WORD!");
 					gameWon = true;
+					setPlayerState(previousState => {
+						return {...previousState,
+							winCount: previousState.winCount+1
+						}
+					})
 				}
 				
 				// endGame = true;
@@ -349,17 +403,16 @@ function App() {
 						endGame: true
 					}
 				});
+				
+				setPlayerState(previousState => {
+					return {...previousState,
+						playCount: previousState.playCount+1,
+						currentPlayStreak: previousState.currentPlayStreak+1,
+						maxPlayStreak: previousState.playCount+1 > previousState.maxPlayStreak ? previousState.playCount+1 : previousState.maxPlayStreak
+					}
+				})
 				setGameOverOverlay(true);
 			}
-
-			/*if (gameState.rowPosition == rowCount) {
-				setGameState(previousState => {
-					return {...previousState,
-						endGame: true
-					}
-				});
-				setGameOverOverlay(true);
-			}*/
 		}
 	}
 
@@ -370,13 +423,6 @@ function App() {
 	
 		updatedCell.color = color;
 		updatedGrid[gameState.rowPosition][columnIndex] = updatedCell;
-
-		
-		// updatedRow.forEach((cell) => {
-		// 	//flip entire row
-		// 	cell.flip = "rotateY(180deg)"
-		// });
-		// updatedGrid[gameState.rowPosition] = updatedRow;
 		
 		setGameState(previousState => {
 			return { ...previousState,
@@ -428,10 +474,39 @@ function App() {
 
 	useEffect(() => {
 		localStorage.setItem('gameState', JSON.stringify(gameState));
-	}, [gameState.submittedWord, gameState.endGame]);
+	}, [gameState.submittedWord, gameState.endGame, gameState.todaysIndex]);
+
+	useEffect(() => {
+		localStorage.setItem('playerState', JSON.stringify(playerState));
+	}, [playerState]);
+
+	function renderResults() {
+		if (gameState.endGame) {
+			return(
+				<div>
+					<h2>{gameWon ? 'Correct Word!' : 'Good Luck Tomorrow'}</h2>
+					<h3>{todaysWord.word}</h3>
+					<span className='instructionsOverlay'>
+						<center><i>{todaysWord.pronunciation}</i></center>
+						<center>{todaysWord.meaning}</center> <br></br>
+						Example: <br></br>
+						"{todaysWord.exampleFarsi}" <br></br>
+						<i>{todaysWord.examplePronunciation}</i><br></br>
+						"{todaysWord.exampleEnglish}" <br></br><br></br>
+					</span>
+				</div>
+			)
+		}
+	}
+	
 
 	return (
 		<div className="App">
+			<div className="menu-icons">
+				<button className="menu-icon" onClick={() => setInstructionOverlay(true)}><Icon icon="material-symbols:info-rounded"/></button>
+				<button className="menu-icon" onClick={() => setGameOverOverlay(true)}><Icon icon="gridicons:stats-up-alt"/></button>
+			</div>
+			
 			<header className="App-header">
 			<h1>
 				daridle
@@ -572,21 +647,57 @@ function App() {
 				</button>
 			</Overlay>
 
+			{/* {() => {
+				if (gameState.endGame) {
+					return()
+				}
+			}}	 */}
+
 			<Overlay configs={overlayConfig} isOpen={isGameOverOverlayOpen} closeOverlay={closeGameOverOverlay} >
-				<h2>{gameWon ? 'Correct Word!' : 'Good Luck Tomorrow'}</h2>
-				<h3>{todaysWord.word}</h3>
+				<div>
+					{renderResults()}
+				</div>
+			
+				<h3>Game Stats</h3>
 				<span className='instructionsOverlay'>
-					<center><i>{todaysWord.pronunciation}</i></center>
-					<center>{todaysWord.meaning}</center> <br></br>
-					Example: <br></br>
-					"{todaysWord.exampleFarsi}" <br></br>
-					<i>{todaysWord.examplePronunciation}</i><br></br>
-					"{todaysWord.exampleEnglish}" <br></br><br></br>
+					Games Played: {playerState.playCount}<br></br>
+					Win %: {playerState.winCount/playerState.playCount * 100}<br></br>
+					Current Streak: {playerState.currentPlayStreak}<br></br>
+					Streak Record: {playerState.maxPlayStreak}<br></br><br></br>
 				</span>
 				<button className='startButton' onClick={() => {setGameOverOverlay(false);}}>
 					Close
 				</button>
 			</Overlay>
+
+			
+			{/*
+			<Overlay configs={overlayConfig} isOpen={isGameOverOverlayOpen} closeOverlay={closeGameOverOverlay} >
+				<div>
+					<h2>{gameWon ? 'Correct Word!' : 'Good Luck Tomorrow'}</h2>
+					<h3>{todaysWord.word}</h3>
+					<span className='instructionsOverlay'>
+						<center><i>{todaysWord.pronunciation}</i></center>
+						<center>{todaysWord.meaning}</center> <br></br>
+						Example: <br></br>
+						"{todaysWord.exampleFarsi}" <br></br>
+						<i>{todaysWord.examplePronunciation}</i><br></br>
+						"{todaysWord.exampleEnglish}" <br></br><br></br>
+					</span>
+				</div>
+				
+				<h3>Game Stats</h3>
+				<span className='instructionsOverlay'>
+					Games Played: {playerState.playCount}<br></br>
+					Win %: {playerState.winCount/playerState.playCount * 100}<br></br>
+					Current Streak: {playerState.currentPlayStreak}<br></br>
+					Streak Record: {playerState.maxPlayStreak}<br></br><br></br>
+				</span>
+				<button className='startButton' onClick={() => {setGameOverOverlay(false);}}>
+					Close
+				</button>
+			</Overlay>
+		*/}
 		</div>
 	);
 }
