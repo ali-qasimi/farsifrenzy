@@ -104,6 +104,15 @@
   font-size: 3vh;
   background-color: #568203;
   color: aliceblue;
+  margin-top: 15px;
+}
+
+.statsCloseButton {
+  height: 10%;
+  width: 50%;
+  font-size: 2vh;
+  background-color: #568203;
+  color: aliceblue;
 }
 
 .flipCells {
@@ -125,4 +134,74 @@
   background-color: transparent;
   border-color: transparent;
   padding: 1px 1px 1px 1px !important;
+}
+
+.instructionCell {
+  color: #000000;
+  width: 65px;
+  height: 65px;
+  align-items: center;
+  justify-content: center;
+  margin: 5px 2px 5px 2px;
+  text-align: center;
+  font-size: 50px;
+  padding-bottom: 10px;
+  backface-visibility: hidden;
+}
+
+@keyframes instructionCellFlip {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(180deg);
+  }
+}
+
+.instructionCellParent {
+  position: relative;
+  transition: transform 2s;
+  transform-style: preserve-3d;
+  transform: rotateY(180deg); 
+  /* animation: 2s ease-in-out 0s 1 instructionCellFlip; */
+}
+
+.instructionCellFront {
+  position: absolute;
+  backface-visibility: hidden;
+}
+.instructionCellBack {
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+}
+
+.greyCell {
+  background-color: darkgray;
+}
+.greenCell {
+  background-color: #568203;
+}
+.yellowCell {
+  background-color: yellow;
+  /* animation: 2s ease-in-out 0s 1 instructionCellFlip; */
+}
+
+
+.statsLabelCell {
+  font-size: small;
+  width: 60px;
+  padding: 1px 10px 30px 5px;
+  text-align: center;
+
+}
+.statsContentCell {
+  font-size: 35px;
+  width: 60px;
+  padding: 1px 5px 1px 5px;
+  text-align: center;
+}
+
+.countdownTimer {
+  font-size: 30px;
+  padding-bottom: 10px;
 }

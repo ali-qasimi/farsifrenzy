@@ -7,6 +7,7 @@ import Overlay from "react-overlay-component";
 import {Buffer} from 'buffer';
 import RawWordList from './constants/FourLetterWordListEncoded.txt'
 import { Icon } from '@iconify/react'
+import Countdown from 'react-countdown';
 
 var todaysWord = {
 	word: "",
@@ -15,7 +16,8 @@ var todaysWord = {
 	exampleFarsi: "",
 	examplePronunciation: "",
 	exampleEnglish: "",
-	todaysIndex: 0
+	todaysIndex: 0,
+	midnightTimestamp: 0
 }
 
 const columnCount = 3; 
@@ -23,6 +25,7 @@ const rowCount = 4;
 // var endGame = false;
 var gameWon = false;
 var solution;
+var msTillNextDay
 
 function App() {
 
@@ -40,7 +43,8 @@ function App() {
 				} else {
 					setGameState(previousState => {
 						return { ...previousState,
-							todaysIndex: todaysWord.todaysIndex
+							todaysIndex: todaysWord.todaysIndex,
+							midnightTimestamp: todaysWord.midnightTimestamp
 						}	
 					});
 				}
@@ -95,6 +99,7 @@ function App() {
 		moveCount: 0,
 		endGame: false,
 		todaysIndex: 0,
+		midnightTimestamp: 0,
 		grid: [
 			[
 				{letter: "", color: "darkgray", flip: "rotateY(0deg)"},
@@ -181,36 +186,6 @@ function App() {
 		playedYesterday: false, //for tomorrow
 	}) 
 
-	//read from local storage on first render:
-	/*useEffect(() => {
-
-		getTodaysIndex();
-
-		try {
-			let gameStateFromLocalStorage = JSON.parse(localStorage.getItem('gameState'));
-			if (gameStateFromLocalStorage) {
-				//only load if it's same day.
-				if (gameStateFromLocalStorage.todaysIndex == todaysWord.todaysIndex) {
-					setGameState(gameStateFromLocalStorage);
-				} else {
-					setGameState(previousState => {
-						return { ...previousState,
-							todaysIndex: todaysWord.todaysIndex
-						}	
-					});
-				}
-			}
-
-			let playerStateFromLocalStorage = JSON.parse(localStorage.getItem('playerState'));
-			if (playerStateFromLocalStorage) {
-				setPlayerState(playerStateFromLocalStorage);
-			}
-		}
-		catch(err) {
-			console.log('Local Storage is Clean');
-		}
-	}, []);*/
-
 	//overlays:
 	const [isInstructionOverlayOpen, setInstructionOverlay] = useState(false);
 	const closeInstructionOverlay = () => setInstructionOverlay(false);
@@ -228,12 +203,16 @@ function App() {
 	};
 
 	function getTodaysIndex() {
-		const epochMs = new Date('April 1, 2023 00:00:00').valueOf();
+		const epochMs = new Date('April 15, 2023 00:00:00').valueOf();
 		const now = Date.now();
 		const msInDay = 86400000;
 		const index = Math.floor((now - epochMs) / msInDay);
+		const msTillNextDay = (index + 1) * msInDay + epochMs;
 
 		todaysWord.todaysIndex = index;
+		todaysWord.midnightTimestamp = msTillNextDay;
+
+		console.log(msTillNextDay);
 	}
 
 	function readWord(letter) {
@@ -474,7 +453,7 @@ function App() {
 
 	useEffect(() => {
 		localStorage.setItem('gameState', JSON.stringify(gameState));
-	}, [gameState.submittedWord, gameState.endGame, gameState.todaysIndex]);
+	}, [gameState.submittedWord, gameState.endGame, gameState.todaysIndex, gameState.midnightTimestamp]);
 
 	useEffect(() => {
 		localStorage.setItem('playerState', JSON.stringify(playerState));
@@ -494,6 +473,20 @@ function App() {
 						<i>{todaysWord.examplePronunciation}</i><br></br>
 						"{todaysWord.exampleEnglish}" <br></br><br></br>
 					</span>
+				</div>
+			)
+		}
+	}
+
+	function renderTimer() {
+		if (gameState.endGame) {
+			getTodaysIndex();
+			return (
+				<div>
+					<span>Next word in:</span>
+					<div className='countdownTimer'>
+						<Countdown date={todaysWord.midnightTimestamp} daysInHours={true} />
+					</div>
 				</div>
 			)
 		}
@@ -636,12 +629,64 @@ function App() {
 			<Overlay configs={overlayConfig} isOpen={isInstructionOverlayOpen} closeOverlay={closeInstructionOverlay} >
 				<h2>Welcome to Daridle!</h2>
 				<h3> Guess today's word in 5 tries</h3>
-				<p className='instructionsOverlay'>
+				<div className='instructionsOverlay'>
 					For a 4-letter word you guess, each tile colour will change to: <br></br><br></br>
-					- Green: Correct Letter, at the correct tile <br></br>
-					- Yellow: Correct letter, at the wrong tile <br></br>
-					- Grey: Wrong letter <br></br>
-				</p>
+					- <strong>Grey:</strong> Wrong letter <br></br>
+					<div className='row'>
+							<div className='instructionCell greyCell'>
+								ی
+							</div>
+							<div className='instructionCell greyCell'>
+								ت
+							</div>
+							<div className='instructionCell greyCell'>
+								ش
+							</div>
+							<div className='instructionCell greyCell'>
+								آ
+							</div>
+					</div>
+					- <strong>Yellow:</strong> Correct letter, at the wrong tile <br></br>
+					<div className='row'>
+							<div className='instructionCell greyCell'>
+								ب
+							</div>
+							<div className='instructionCell greyCell'>
+								ش
+							</div>
+							<div className='instructionCell greyCell'>
+								م
+							</div>
+							<div className='instructionCellParent'>
+								<div className='instructionCell instructionCellFront greyCell'>
+									ا
+								</div>
+								<div className='instructionCell instructionCellBack yellowCell'>
+									ا
+								</div>
+							</div>
+					</div>
+					- <strong>Green:</strong> Correct Letter, at the correct tile <br></br>
+					<div className='row'>
+							<div className='instructionCell greyCell'>
+								ن
+							</div>
+							<div className='instructionCellParent'>
+								<div className='instructionCell instructionCellFront greyCell'>
+									ا
+								</div>
+								<div className='instructionCell instructionCellBack greenCell'>
+									ا
+								</div>
+							</div>
+							<div className='instructionCell greyCell'>
+								و
+							</div>
+							<div className='instructionCell greyCell'>
+								ج
+							</div>
+					</div>
+				</div>
 				<button className='startButton' onClick={() => {setInstructionOverlay(false);}}>
 					Start
 				</button>
@@ -659,13 +704,41 @@ function App() {
 				</div>
 			
 				<h3>Game Stats</h3>
-				<span className='instructionsOverlay'>
-					Games Played: {playerState.playCount}<br></br>
-					Win %: {playerState.winCount/playerState.playCount * 100}<br></br>
-					Current Streak: {playerState.currentPlayStreak}<br></br>
-					Streak Record: {playerState.maxPlayStreak}<br></br><br></br>
-				</span>
-				<button className='startButton' onClick={() => {setGameOverOverlay(false);}}>
+				<div className='instructionsOverlay'>
+					<div className='row'>
+						<div className='statsContentCell'>
+							{playerState.playCount}
+						</div>
+						<div className='statsContentCell'>
+							{Math.round(playerState.winCount/playerState.playCount * 100)}%
+						</div>
+						<div className='statsContentCell'>
+							{playerState.currentPlayStreak}
+						</div>
+						<div className='statsContentCell'>
+							{playerState.maxPlayStreak}
+						</div>
+					</div>
+					<div className='row'>
+						<div className='statsLabelCell'>
+							Games Played
+						</div>
+						<div className='statsLabelCell'>
+							Win %
+						</div>
+						<div className='statsLabelCell'>
+							Current Streak
+						</div>
+						<div className='statsLabelCell'>
+							Streak Record
+						</div>
+					</div>
+					
+				</div>
+
+				{renderTimer()}
+				
+				<button className='statsCloseButton' onClick={() => {setGameOverOverlay(false);}}>
 					Close
 				</button>
 			</Overlay>
