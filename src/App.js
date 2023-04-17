@@ -501,10 +501,9 @@ function App() {
 			</div>
 			
 			<header className="App-header">
-			<h1>
 				daridle
-			</h1>
 			</header>
+			<div className='banner'></div>
 
 			{gameState.grid.map((grid, idx) => {
 				return(
@@ -520,27 +519,27 @@ function App() {
 							let cellStyleFront = {
 								position: 'absolute',
 								color: '#000000',
-								width: '75px',
-								height: '75px',
+								width: '60px',
+								height: '60px',
 								alignItems: 'center',
 								justifyContent: 'center',
 								backgroundColor: 'darkgray',
 								margin: '5px 2px 5px 2px',
 								textAlign: 'center',
-								fontSize: '60px',
+								fontSize: '50px',
 								paddingBottom: '10px',
   								backfaceVisibility: 'hidden',
 							}
 							let cellStyleBack = {
 								color: '#000000',
-								width: '75px',
-								height: '75px',
+								width: '60px',
+								height: '60px',
 								alignItems: 'center',
 								justifyContent: 'center',
 								backgroundColor: row.color,
 								margin: '5px 2px 5px 2px',
 								textAlign: 'center',
-								fontSize: '60px',
+								fontSize: '50px',
 								paddingBottom: '10px',
 								backfaceVisibility: 'hidden',
 								transform: 'rotateY(180deg)'
@@ -568,15 +567,16 @@ function App() {
 					
 					{gameState.keys[0].map((key,idx) => {
 						let keyStyle = {
-							minHeight: '40px',
-							minWidth: '7vw',
+							minHeight: '50px',
+							width: 'calc(100% / 12 - 3px)',
+							maxWidth: '30px',
 							textAlign: 'center',
 							fontSize: '150%',
 							fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
 							padding: '0',
 							margin: '1px',
 							backgroundColor: key.color,
-							borderRadius: '1vw',
+							borderRadius: '7px',
 							border: 'none'
 						}
 						return(
@@ -587,15 +587,16 @@ function App() {
 				<div className='keys'>
 					{gameState.keys[1].map((key,idx) => {
 						let keyStyle = {
-							minHeight: '40px',
-							minWidth: '7vw',
+							minHeight: '50px',
+							width: 'calc(100% / 12 - 3px)',
+							maxWidth: '30px',
 							textAlign: 'center',
 							fontSize: '150%',
 							fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
 							padding: '0',
 							margin: '1px',
 							backgroundColor: key.color,
-							borderRadius: '20%',
+							borderRadius: '7px',
 							border: 'none'
 						}
 						return(
@@ -603,26 +604,27 @@ function App() {
 						)
 					})}
 				</div>
-				<div className='keys2'>
-					<button onClick={submitWord} type="submit" className='key'>Enter</button>
+				<div className='keys'>
+					<button onClick={submitWord} type="submit" className='enter-del-key'>Enter</button>
 					{gameState.keys[2].map((key,idx) => {
 						let keyStyle = {
-							minHeight: '40px',
-							minWidth: '7vw',
+							minHeight: '50px',
+							width: 'calc(100% / 12 - 3px)',
+							maxWidth: '30px',
 							textAlign: 'center',
 							fontSize: '150%',
 							fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
 							padding: '0',
 							margin: '1px',
 							backgroundColor: key.color,
-							borderRadius: '20%',
+							borderRadius: '7px',
 							border: 'none'
 						}
 						return(
 							<button onClick={() => gameState.endGame == false ? readWord(key.alphabet) : null} type="submit" key={idx} style={keyStyle}>{key.alphabet}</button>
 						)
 					})}
-					<button onClick={deleteLetter} type="submit" className='key'>Del</button>
+					<button onClick={deleteLetter} type="submit" className='enter-del-key'>Del</button>
 				</div>
 			</div>
 
