@@ -61,7 +61,7 @@ function App() {
 
 		async function getTodaysWord() {
 
-			const fourLetterWordList = require('./constants/FourLetterWordList.ts')
+			// const fourLetterWordList = require('./constants/FourLetterWordList.ts')
 			// const fourLetterWordListEncoded = require('./constants/FourLetterWordListEncoded.txt')
 			const response = await fetch(RawWordList);
 			const fourLetterWordListEncoded = await response.text();
@@ -135,44 +135,44 @@ function App() {
 		cellColor: "darkgray",
 		keys: [
 			[
-				{alphabet: "ض", color: "white"},
-				{alphabet: "ص", color: "white"},
-				{alphabet: "ث", color: "white"},
-				{alphabet: "ق", color: "white"},
-				{alphabet: "ف", color: "white"},
-				{alphabet: "غ", color: "white"},
-				{alphabet: "ع", color: "white"},
-				{alphabet: "ه", color: "white"},
-				{alphabet: "خ", color: "white"},
-				{alphabet: "ح", color: "white"},
-				{alphabet: "ج", color: "white"},
-				{alphabet: "چ", color: "white"}
+				{alphabet: "ض", color: "lightblue"},
+				{alphabet: "ص", color: "lightblue"},
+				{alphabet: "ث", color: "lightblue"},
+				{alphabet: "ق", color: "lightblue"},
+				{alphabet: "ف", color: "lightblue"},
+				{alphabet: "غ", color: "lightblue"},
+				{alphabet: "ع", color: "lightblue"},
+				{alphabet: "ه", color: "lightblue"},
+				{alphabet: "خ", color: "lightblue"},
+				{alphabet: "ح", color: "lightblue"},
+				{alphabet: "ج", color: "lightblue"},
+				{alphabet: "چ", color: "lightblue"}
 
 			],
 			[
-				{alphabet: "ش", color: "white"},
-				{alphabet: "س", color: "white"},
-				{alphabet: "ی", color: "white"},
-				{alphabet: "ب", color: "white"},
-				{alphabet: "ل", color: "white"},
-				{alphabet: "ا", color: "white"},
-				{alphabet: "آ", color: "white"},
-				{alphabet: "ت", color: "white"},
-				{alphabet: "ن", color: "white"},
-				{alphabet: "م", color: "white"},
-				{alphabet: "ک", color: "white"},
-				{alphabet: "گ", color: "white"}
+				{alphabet: "ش", color: "lightblue"},
+				{alphabet: "س", color: "lightblue"},
+				{alphabet: "ی", color: "lightblue"},
+				{alphabet: "ب", color: "lightblue"},
+				{alphabet: "ل", color: "lightblue"},
+				{alphabet: "ا", color: "lightblue"},
+				{alphabet: "آ", color: "lightblue"},
+				{alphabet: "ت", color: "lightblue"},
+				{alphabet: "ن", color: "lightblue"},
+				{alphabet: "م", color: "lightblue"},
+				{alphabet: "ک", color: "lightblue"},
+				{alphabet: "گ", color: "lightblue"}
 			],
 			[
-				{alphabet: "ظ", color: "white"},
-				{alphabet: "ط", color: "white"},
-				{alphabet: "ز", color: "white"},
-				{alphabet: "ژ", color: "white"},
-				{alphabet: "ر", color: "white"},
-				{alphabet: "ذ", color: "white"},
-				{alphabet: "د", color: "white"},
-				{alphabet: "پ", color: "white"},
-				{alphabet: "و", color: "white"},
+				{alphabet: "ظ", color: "lightblue"},
+				{alphabet: "ط", color: "lightblue"},
+				{alphabet: "ز", color: "lightblue"},
+				{alphabet: "ژ", color: "lightblue"},
+				{alphabet: "ر", color: "lightblue"},
+				{alphabet: "ذ", color: "lightblue"},
+				{alphabet: "د", color: "lightblue"},
+				{alphabet: "پ", color: "lightblue"},
+				{alphabet: "و", color: "lightblue"},
 			]
 
 		]
@@ -463,8 +463,8 @@ function App() {
 		if (gameState.endGame) {
 			return(
 				<div>
-					<h2>{gameWon ? 'Correct Word!' : 'Good Luck Tomorrow'}</h2>
-					<h3>{todaysWord.word}</h3>
+					<h2 className='english-theme-font'>{gameWon ? 'Correct Word!' : 'Good Luck Tomorrow'}</h2>
+					<h3 className='farsi-theme-font'>{todaysWord.word}</h3>
 					<span className='instructionsOverlay'>
 						<center><i>{todaysWord.pronunciation}</i></center>
 						<center>{todaysWord.meaning}</center> <br></br>
@@ -527,8 +527,10 @@ function App() {
 								margin: '5px 2px 5px 2px',
 								textAlign: 'center',
 								fontSize: '50px',
+								fontFamily: "koodak",
 								paddingBottom: '10px',
   								backfaceVisibility: 'hidden',
+								borderRadius: '0.5rem'
 							}
 							let cellStyleBack = {
 								color: '#000000',
@@ -540,9 +542,11 @@ function App() {
 								margin: '5px 2px 5px 2px',
 								textAlign: 'center',
 								fontSize: '50px',
+								fontFamily: "koodak",
 								paddingBottom: '10px',
 								backfaceVisibility: 'hidden',
-								transform: 'rotateY(180deg)'
+								transform: 'rotateY(180deg)',
+								borderRadius: '0.5rem'
 							}
 
 							return(
@@ -572,7 +576,7 @@ function App() {
 							maxWidth: '30px',
 							textAlign: 'center',
 							fontSize: '150%',
-							fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+							fontFamily: "koodak",
 							padding: '0',
 							margin: '1px',
 							backgroundColor: key.color,
@@ -592,7 +596,7 @@ function App() {
 							maxWidth: '30px',
 							textAlign: 'center',
 							fontSize: '150%',
-							fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+							fontFamily: "koodak",
 							padding: '0',
 							margin: '1px',
 							backgroundColor: key.color,
@@ -613,7 +617,7 @@ function App() {
 							maxWidth: '30px',
 							textAlign: 'center',
 							fontSize: '150%',
-							fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+							fontFamily: "koodak",
 							padding: '0',
 							margin: '1px',
 							backgroundColor: key.color,
@@ -629,8 +633,8 @@ function App() {
 			</div>
 
 			<Overlay configs={overlayConfig} isOpen={isInstructionOverlayOpen} closeOverlay={closeInstructionOverlay} >
-				<h2>Welcome to Daridle!</h2>
-				<h3> Guess today's word in 5 tries</h3>
+				<h2 className='english-theme-font'>Welcome to Daridle!</h2>
+				<h3 className='english-theme-font'> Guess today's word in 5 tries</h3>
 				<div className='instructionsOverlay'>
 					For a 4-letter word you guess, each tile colour will change to: <br></br><br></br>
 					- <strong>Grey:</strong> Wrong letter <br></br>
@@ -705,14 +709,14 @@ function App() {
 					{renderResults()}
 				</div>
 			
-				<h3>Game Stats</h3>
+				<h3 className='english-theme-font'>Game Stats</h3>
 				<div className='instructionsOverlay'>
 					<div className='row'>
 						<div className='statsContentCell'>
 							{playerState.playCount}
 						</div>
 						<div className='statsContentCell'>
-							{Math.round(playerState.winCount/playerState.playCount * 100)}%
+							{playerState.playCount ? Math.round(playerState.winCount/playerState.playCount * 100) : '0'}%
 						</div>
 						<div className='statsContentCell'>
 							{playerState.currentPlayStreak}

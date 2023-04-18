@@ -1,11 +1,11 @@
 .App {
   text-align: center;
-  background-color: #282c34;
+  background-color: #141f34;
   height: 100%;
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #141f34;
   height: 10vw;
   display: flex;
   flex-direction: column;
@@ -14,11 +14,32 @@
   font-size: 150%;
   color: white;
   padding: 1vh 0 0 3vw;
+  font-family: righteous;
 }
 
 .App-link {
   color: #61dafb;
 }
+
+@font-face {
+  font-family: koodak;
+  src: url(fonts/koodak.ttf);
+}
+
+@font-face {
+  font-family: righteous;
+  src: url(fonts/Righteous-Regular.ttf);
+}
+
+.farsi-theme-font {
+  font-family: koodak;
+  font-size: 150%;
+}
+
+.english-theme-font {
+  font-family: righteous;
+}
+
 
 .banner {
   height: 20px;
@@ -51,12 +72,13 @@
   min-height: 50px;
   min-width: 40px;
   text-align: center;
-  font-size: 150%;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 110%;
+  font-family: righteous;
   padding: 0;
   margin: 1px;
   border-radius: 7px;
   border: none;
+  background-color: lightblue;
 }
 
 /* .keys0 */
@@ -118,15 +140,17 @@
 
 .instructionCell {
   color: #000000;
-  width: 65px;
-  height: 65px;
+  width: 60px;
+  height: 60px;
   align-items: center;
   justify-content: center;
   margin: 5px 2px 5px 2px;
   text-align: center;
   font-size: 50px;
+  font-family: koodak;
   padding-bottom: 10px;
   backface-visibility: hidden;
+  border-radius: 0.5rem;
 }
 
 @keyframes instructionCellFlip {
