@@ -25,7 +25,7 @@
     {"word": "حقون", "pronunciation": "hoquq", "meaning": "rights, privileges, law", "exampleFarsi": "ما باید برای حقوق بشر بجنگیم", "examplePronunciation": "ma bayad baraye hoquqe bashar bejangim", "exampleEnglish": "We should fight for human rights"},
     {"word": "منفی", "pronunciation": "manfi", "meaning": "negative, minus, destructive", "exampleFarsi": "نتیجه تست کورونا منفی است", "examplePronunciation": "natije teste corona manfi ast", "exampleEnglish": "The corona test result is negative"},
     {"word": "جالب", "pronunciation": "jaleb", "meaning": "eye-catching, notable, interesting", "exampleFarsi": "بازی برایش خیلی جالب بود", "examplePronunciation": "bazi barayash kheli jaleb bood", "exampleEnglish": "The game was very interesting to her"},
-    {"word": "زخمی", "pronunciation": "zakhmi", "meaning": "casualty, wounded", "exampleFarsi": "", "examplePronunciation": "", "exampleEnglish": ""},
+    {"word": "زخمی", "pronunciation": "zakhmi", "meaning": "casualty, wounded", "exampleFarsi": "در زلزله دیشب کسی زخمی نشد", "examplePronunciation": "dar zelzeleh dishab kasi zakhmi nashod", "exampleEnglish": "Nobody was wounded in the earthquake last night"},
     {"word": "حجیم", "pronunciation": "hajim", "meaning": "bulky, massive, voluminous, huge", "exampleFarsi": "", "examplePronunciation": "", "exampleEnglish": ""},
     {"word": "فقیر", "pronunciation": "faqir", "meaning": "deprived, penniless, poor", "exampleFarsi": "", "examplePronunciation": "", "exampleEnglish": ""},
     {"word": "شیوه", "pronunciation": "shewa", "meaning": "approach, means, method,", "exampleFarsi": "", "examplePronunciation": "", "exampleEnglish": ""},
