@@ -103,10 +103,12 @@
 .startButton {
   height: 10%;
   width: 50%;
-  font-size: 3vh;
+  font-size: 150%;
   background-color: #568203;
   color: aliceblue;
   margin-top: 15px;
+  border: hidden;
+  border-radius: 0.5rem;
 }
 
 .statsCloseButton {
@@ -115,6 +117,8 @@
   font-size: 150%;
   background-color: #568203;
   color: aliceblue;
+  border: hidden;
+  border-radius: 0.5rem;
 }
 
 .flipCells {
@@ -146,9 +150,8 @@
   justify-content: center;
   margin: 5px 2px 5px 2px;
   text-align: center;
-  font-size: 50px;
+  font-size: 250%;
   font-family: koodak;
-  padding-bottom: 10px;
   backface-visibility: hidden;
   border-radius: 0.5rem;
 }

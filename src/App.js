@@ -52,11 +52,19 @@ function App() {
 
 			let playerStateFromLocalStorage = JSON.parse(localStorage.getItem('playerState'));
 			if (playerStateFromLocalStorage) {
-				setPlayerState(playerStateFromLocalStorage);
+				if (gameStateFromLocalStorage.todaysIndex == todaysWord.todaysIndex - 1 || gameStateFromLocalStorage.todaysIndex == todaysWord.todaysIndex) {
+					setPlayerState(playerStateFromLocalStorage);
+				} else {
+					setPlayerState(previousState => {
+						return { ...previousState,
+							currentPlayStreak: 0
+						}
+					})
+				}
 			}
 		}
 		catch(err) {
-			console.log('Local Storage is Clean');
+			console.log('Local Storage is has no game data.');
 		}
 
 		async function getTodaysWord() {
@@ -203,7 +211,7 @@ function App() {
 	};
 
 	function getTodaysIndex() {
-		const epochMs = new Date('April 15, 2023 00:00:00').valueOf();
+		const epochMs = new Date('April 23, 2023 00:00:00').valueOf();
 		const now = Date.now();
 		const msInDay = 86400000;
 		const index = Math.floor((now - epochMs) / msInDay);
@@ -387,13 +395,24 @@ function App() {
 					return {...previousState,
 						playCount: previousState.playCount+1,
 						currentPlayStreak: previousState.currentPlayStreak+1,
-						maxPlayStreak: previousState.playCount+1 > previousState.maxPlayStreak ? previousState.playCount+1 : previousState.maxPlayStreak
+						maxPlayStreak: previousState.currentPlayStreak+1 > previousState.maxPlayStreak ? previousState.currentPlayStreak+1 : previousState.maxPlayStreak
 					}
 				})
-				setGameOverOverlay(true);
+				// setGameOverOverlay(true);
 			}
 		}
 	}
+
+	//render gameOverOverlay after game ends and row has flipped:
+	useEffect(() => {
+		if (gameState.endGame && isInstructionOverlayOpen != true) {
+			setTimeout( () => {
+				setGameOverOverlay(true)
+			}, 
+			2000);
+		}
+	}, [gameState.endGame]);
+
 
 	function cellUpdateColor(columnIndex, color) {
 		let updatedGrid = [...gameState.grid];
@@ -515,6 +534,7 @@ function App() {
 								transition: 'transform 2s',
   								transformStyle: 'preserve-3d',
 								transform: row.flip,
+								// marginTop: '-10px',
 							}
 							let cellStyleFront = {
 								position: 'absolute',
@@ -526,9 +546,8 @@ function App() {
 								backgroundColor: 'darkgray',
 								margin: '5px 2px 5px 2px',
 								textAlign: 'center',
-								fontSize: '50px',
+								fontSize: '250%',
 								fontFamily: "koodak",
-								paddingBottom: '10px',
   								backfaceVisibility: 'hidden',
 								borderRadius: '0.5rem'
 							}
@@ -541,9 +560,8 @@ function App() {
 								backgroundColor: row.color,
 								margin: '5px 2px 5px 2px',
 								textAlign: 'center',
-								fontSize: '50px',
+								fontSize: '250%',
 								fontFamily: "koodak",
-								paddingBottom: '10px',
 								backfaceVisibility: 'hidden',
 								transform: 'rotateY(180deg)',
 								borderRadius: '0.5rem'
