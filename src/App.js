@@ -69,26 +69,21 @@ function App() {
 
 		async function getTodaysWord() {
 
-			// const fourLetterWordList = require('./constants/FourLetterWordList.ts')
-			// const fourLetterWordListEncoded = require('./constants/FourLetterWordListEncoded.txt')
-			const response = await fetch(RawWordList);
-			const fourLetterWordListEncoded = await response.text();
-			
+			//for plain text:
+			const fourLetterWordList = require('./constants/FourLetterWordList.ts')
+
+			//for encoded:
+			// const response = await fetch(RawWordList);
+			// const fourLetterWordListEncoded = await response.text();		
 			// console.log(`${fourLetterWordListEncoded}`);
-	
-			let buffer = new Buffer.from(fourLetterWordListEncoded, 'base64');
-			let fourLetterWordListDecoded = buffer.toString('utf-8');
-			fourLetterWordListDecoded = JSON.parse("[" + fourLetterWordListDecoded + "]");
+			// let buffer = new Buffer.from(fourLetterWordListEncoded, 'base64');
+			// let fourLetterWordListDecoded = buffer.toString('utf-8');
+			// fourLetterWordListDecoded = JSON.parse("[" + fourLetterWordListDecoded + "]");
 	
 			// console.log(`fourLetterWordListDecoded: ${fourLetterWordListDecoded}`);
-	
-			// const epochMs = new Date('April 1, 2023 00:00:00').valueOf();
-			// const now = Date.now();
-			// const msInDay = 86400000;
-			// const index = Math.floor((now - epochMs) / msInDay);
-			// const nextday = (index + 1) * msInDay + epochMs;
+			
 			todaysWord = {...
-				fourLetterWordListDecoded[0][todaysWord.todaysIndex]
+				fourLetterWordList[todaysWord.todaysIndex]
 			};
 			console.log(`word: ${todaysWord.word}, pronunciation: ${todaysWord.pronunciation}, meaning: ${todaysWord.meaning}, exampleFarsi: ${todaysWord.exampleFarsi}`);
 
