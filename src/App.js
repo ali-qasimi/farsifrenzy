@@ -206,7 +206,7 @@ function App() {
 	};
 
 	function getTodaysIndex() {
-		const epochMs = new Date('April 23, 2023 00:00:00').valueOf();
+		const epochMs = new Date('April 19, 2023 00:00:00').valueOf();
 		const now = Date.now();
 		const msInDay = 86400000;
 		const index = Math.floor((now - epochMs) / msInDay);
@@ -215,7 +215,7 @@ function App() {
 		todaysWord.todaysIndex = index;
 		todaysWord.midnightTimestamp = msTillNextDay;
 
-		console.log(msTillNextDay);
+		// console.log(msTillNextDay);
 	}
 
 	function readWord(letter) {
