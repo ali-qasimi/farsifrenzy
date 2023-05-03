@@ -36,8 +36,10 @@ function App() {
 		//load states from local storage:
 		try {
 			let gameStateFromLocalStorage = JSON.parse(localStorage.getItem('gameState'));
+			let playerStateFromLocalStorage = JSON.parse(localStorage.getItem('playerState'));
+
 			if (gameStateFromLocalStorage) {
-				//only load if it's same day.
+				//to reset the game state or not:
 				if (gameStateFromLocalStorage.todaysIndex == todaysWord.todaysIndex) {
 					setGameState(gameStateFromLocalStorage);
 				} else {
@@ -45,13 +47,35 @@ function App() {
 						return { ...previousState,
 							todaysIndex: todaysWord.todaysIndex,
 							midnightTimestamp: todaysWord.midnightTimestamp
-						}	
+						}
 					});
 				}
+
+				//To reset the player state or not:
+				if (playerStateFromLocalStorage.lastPlayedIndex == todaysWord.todaysIndex || playerStateFromLocalStorage.lastPlayedIndex == todaysWord.todaysIndex - 1) {
+					setPlayerState(playerStateFromLocalStorage);
+				} else {
+					setPlayerState(() => {
+						return {
+							playCount: playerStateFromLocalStorage.playCount,
+							winCount: playerStateFromLocalStorage.winCount,
+							currentPlayStreak: 0,
+							maxPlayStreak: playerStateFromLocalStorage.maxPlayStreak,
+							lastPlayedIndex: playerStateFromLocalStorage.lastPlayedIndex
+						}
+					})
+				}
+			} else {
+				//state will have default value, only add below
+				setGameState(previousState => {
+					return { ...previousState,
+						todaysIndex: todaysWord.todaysIndex,
+						midnightTimestamp: todaysWord.midnightTimestamp
+					}
+				});
 			}
 
-			let playerStateFromLocalStorage = JSON.parse(localStorage.getItem('playerState'));
-			if (playerStateFromLocalStorage) {
+			/*if (playerStateFromLocalStorage) {
 				if (gameStateFromLocalStorage.todaysIndex == todaysWord.todaysIndex - 1 || gameStateFromLocalStorage.todaysIndex == todaysWord.todaysIndex) {
 					setPlayerState(playerStateFromLocalStorage);
 				} else {
@@ -61,7 +85,7 @@ function App() {
 						}
 					})
 				}
-			}
+			}*/
 		}
 		catch(err) {
 			console.log('Local Storage is has no game data.');
@@ -186,7 +210,7 @@ function App() {
 		winCount: 0,
 		currentPlayStreak: 0,
 		maxPlayStreak: 0,
-		playedYesterday: false, //for tomorrow
+		lastPlayedIndex: 0
 	}) 
 
 	//overlays:
@@ -206,7 +230,7 @@ function App() {
 	};
 
 	function getTodaysIndex() {
-		const epochMs = new Date('April 19, 2023 00:00:00').valueOf();
+		const epochMs = new Date('April 4, 2023 00:00:00').valueOf();
 		const now = Date.now();
 		const msInDay = 86400000;
 		const index = Math.floor((now - epochMs) / msInDay);
@@ -390,7 +414,8 @@ function App() {
 					return {...previousState,
 						playCount: previousState.playCount+1,
 						currentPlayStreak: previousState.currentPlayStreak+1,
-						maxPlayStreak: previousState.currentPlayStreak+1 > previousState.maxPlayStreak ? previousState.currentPlayStreak+1 : previousState.maxPlayStreak
+						maxPlayStreak: previousState.currentPlayStreak+1 > previousState.maxPlayStreak ? previousState.currentPlayStreak+1 : previousState.maxPlayStreak,
+						lastPlayedIndex: gameState.todaysIndex
 					}
 				})
 				// setGameOverOverlay(true);
@@ -466,11 +491,16 @@ function App() {
 	}
 
 	useEffect(() => {
-		localStorage.setItem('gameState', JSON.stringify(gameState));
+		if (gameState.todaysIndex != 0) {	//skips initial render when states have default value
+			localStorage.setItem('gameState', JSON.stringify(gameState));
+			// console.log(`local storage updated to: ${localStorage.getItem('gameState')}`)
+		}
 	}, [gameState.submittedWord, gameState.endGame, gameState.todaysIndex, gameState.midnightTimestamp]);
 
 	useEffect(() => {
-		localStorage.setItem('playerState', JSON.stringify(playerState));
+		if (playerState.playCount != 0) {  //skips initial render when states have default value
+			localStorage.setItem('playerState', JSON.stringify(playerState));
+		}
 	}, [playerState]);
 
 	function renderResults() {
