@@ -1,11 +1,11 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Grid from './component/grid/grid';
 import Keyboard from './component/keyboard/keyboard';
 import { flushSync } from 'react-dom';
 import Overlay from "react-overlay-component";
 import {Buffer} from 'buffer';
-import RawWordList from './constants/FourLetterWordListEncoded.txt'
+// import RawWordList from './constants/FourLetterWordListEncoded.txt'
 import { Icon } from '@iconify/react'
 import Countdown from 'react-countdown';
 
@@ -22,10 +22,10 @@ var todaysWord = {
 
 const columnCount = 3; 
 const rowCount = 4;
-// var endGame = false;
 var gameWon = false;
 var solution;
-var msTillNextDay
+var msTillNextDay;
+// var growShrinkTransform = '';
 
 function App() {
 
@@ -109,7 +109,7 @@ function App() {
 			todaysWord = {...
 				fourLetterWordList[todaysWord.todaysIndex]
 			};
-			console.log(`word: ${todaysWord.word}, pronunciation: ${todaysWord.pronunciation}, meaning: ${todaysWord.meaning}, exampleFarsi: ${todaysWord.exampleFarsi}`);
+			// console.log(`word: ${todaysWord.word}, pronunciation: ${todaysWord.pronunciation}, meaning: ${todaysWord.meaning}, exampleFarsi: ${todaysWord.exampleFarsi}`);
 
 		}
 
@@ -337,34 +337,6 @@ function App() {
 		}
 		
 	}, [gameState.submittedWord]);
-	
-	/* //initial method, uses plain text file and can't get same word throughout the day.
-	function getTodaysWord() {
-		let todaysWord = {
-			word: "",
-			pronunciation: "",
-			meaning: "",
-			exampleFarsi: "",
-			examplePronunciation: "",
-			exampleEnglish: ""
-		}
-		const fourLetterWordList = require('./constants/FourLetterWordList.ts')
-	
-		const wordCount = fourLetterWordList.length
-		const todaysIndex = Math.floor(Math.random() * wordCount);
-	
-		todaysWord.word = fourLetterWordList[todaysIndex][0];
-		todaysWord.pronunciation = fourLetterWordList[todaysIndex][1];
-		todaysWord.meaning = fourLetterWordList[todaysIndex][2];
-		todaysWord.exampleFarsi = fourLetterWordList[todaysIndex][3];
-		todaysWord.examplePronunciation = fourLetterWordList[todaysIndex][4];
-		todaysWord.exampleEnglish = fourLetterWordList[todaysIndex][5];
-	
-		console.log(`today's word is: ${todaysWord.word}`);
-	
-		return todaysWord;
-	}
-	*/
 	
 	function assessWord(submittedWord, todaysWord) {
 	
