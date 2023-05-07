@@ -545,7 +545,7 @@ function App() {
 			</div>
 			
 			<header className="App-header">
-				daridle
+				FarsiFrenzy
 			</header>
 			<div className='banner'></div>
 
@@ -676,7 +676,7 @@ function App() {
 			</div>
 
 			<Overlay configs={overlayConfig} isOpen={isInstructionOverlayOpen} closeOverlay={closeInstructionOverlay} >
-				<h2 className='english-theme-font'>Welcome to Daridle!</h2>
+				<h2 className='english-theme-font'>Welcome to Farsi Frenzy!</h2>
 				<h3 className='english-theme-font'> Guess today's word in 5 tries</h3>
 				<div className='instructionsOverlay'>
 					For a 4-letter word you guess, each tile colour will change to: <br></br><br></br>
