@@ -230,7 +230,7 @@ function App() {
 	};
 
 	function getTodaysIndex() {
-		const epochMs = new Date('April 4, 2023 00:00:00').valueOf();
+		const epochMs = new Date('May 8, 2023 00:00:00').valueOf();
 		const now = Date.now();
 		const msInDay = 86400000;
 		const index = Math.floor((now - epochMs) / msInDay);
@@ -245,7 +245,7 @@ function App() {
 	function readWord(letter) {
 		if (gameState.columnPosition !== 0 && gameState.rowPosition <= 4) {
 			let currentWord = gameState.submittedWord;
-			console.log(currentWord);
+			// console.log(currentWord);
 			// currentWord += letter;
 
 			setGameState(previousState => {
@@ -259,13 +259,13 @@ function App() {
 			// boxAddLetter(letter);
 			
 		}
-		console.log(gameState.submittedWord);
+		// console.log(gameState.submittedWord);
 	}
 	
 	function submitWord() {
 	
 		if (gameState.rowPosition <= rowCount && gameState.columnPosition == 0) {
-			console.log('submitting word');
+			// console.log('submitting word');
 			assessWord(gameState.submittedWord, todaysWord.word);
 			
 			setGameState(previousState => {
@@ -280,7 +280,7 @@ function App() {
 	}
 	
 	function deleteLetter() {
-		console.log('deleting letter');
+		// console.log('deleting letter');
 		if (gameState.columnPosition >= -1 && gameState.columnPosition <= 3) {
 			var currentWord = gameState.submittedWord;
 			currentWord = currentWord.substring(0, currentWord.length-1);
@@ -324,7 +324,6 @@ function App() {
 		if (gameState.columnPosition >= 0 && gameState.columnPosition <= 3) {
 			let updatedGrid = [...gameState.grid];
 			let updatedCell = updatedGrid[gameState.rowPosition][gameState.columnPosition];
-			// console.log(updatedGrid[this.state.rowPosition][this.state.columnPosition]);
 		
 			updatedCell.letter = gameState.bufferLetter;
 			updatedGrid[gameState.rowPosition][gameState.columnPosition] = updatedCell;
@@ -344,17 +343,17 @@ function App() {
 	
 		for (let i = 0; i <= columnCount; i++) {
 			if (submittedWordShort[i] == todaysWord[i]) {
-				console.log(`Letter ${submittedWordShort[i]} is correct`);
+				// console.log(`Letter ${submittedWordShort[i]} is correct`);
 				//turn cell green
 				cellUpdateColor(3-i, "#568203");
 				updateKeyboard(submittedWordShort[i], '#568203');
 			} else if (submittedWordShort[i] !== todaysWord[i] && todaysWord.includes(submittedWordShort[i])) {
-				console.log(`Righ letter ${submittedWordShort[i]}, wrong cell`);
+				// console.log(`Righ letter ${submittedWordShort[i]}, wrong cell`);
 				//turn cell yellow
 				cellUpdateColor(3-i, "yellow");
 				updateKeyboard(submittedWordShort[i], 'yellow');
 			} else {
-				console.log(`Letter ${submittedWordShort[i]} is incorrect`);
+				// console.log(`Letter ${submittedWordShort[i]} is incorrect`);
 				updateKeyboard(submittedWordShort[i], 'grey');
 			}
 		}
@@ -366,7 +365,7 @@ function App() {
 			if (submittedWordShort == todaysWord || gameState.rowPosition == rowCount) {
 				
 				if (submittedWordShort == todaysWord) {
-					console.log("CORRECT WORD!");
+					// console.log("CORRECT WORD!");
 					gameWon = true;
 					setPlayerState(previousState => {
 						return {...previousState,
@@ -446,7 +445,7 @@ function App() {
 			var keyIndex = updatedKeyboard[keyRow].findIndex(key => key.alphabet == keyLetter);
 
 			if (keyIndex != -1) {
-				console.log(`index of ${keyLetter} is ${keyRow},${keyIndex}`)
+				// console.log(`index of ${keyLetter} is ${keyRow},${keyIndex}`)
 				break;
 			} else { continue; }
 		}
@@ -465,7 +464,6 @@ function App() {
 	useEffect(() => {
 		if (gameState.todaysIndex != 0) {	//skips initial render when states have default value
 			localStorage.setItem('gameState', JSON.stringify(gameState));
-			// console.log(`local storage updated to: ${localStorage.getItem('gameState')}`)
 		}
 	}, [gameState.submittedWord, gameState.endGame, gameState.todaysIndex, gameState.midnightTimestamp]);
 
@@ -713,12 +711,6 @@ function App() {
 				</button>
 			</Overlay>
 
-			{/* {() => {
-				if (gameState.endGame) {
-					return()
-				}
-			}}	 */}
-
 			<Overlay configs={overlayConfig} isOpen={isGameOverOverlayOpen} closeOverlay={closeGameOverOverlay} >
 				<div>
 					{renderResults()}
@@ -764,34 +756,6 @@ function App() {
 				</button>
 			</Overlay>
 
-			
-			{/*
-			<Overlay configs={overlayConfig} isOpen={isGameOverOverlayOpen} closeOverlay={closeGameOverOverlay} >
-				<div>
-					<h2>{gameWon ? 'Correct Word!' : 'Good Luck Tomorrow'}</h2>
-					<h3>{todaysWord.word}</h3>
-					<span className='instructionsOverlay'>
-						<center><i>{todaysWord.pronunciation}</i></center>
-						<center>{todaysWord.meaning}</center> <br></br>
-						Example: <br></br>
-						"{todaysWord.exampleFarsi}" <br></br>
-						<i>{todaysWord.examplePronunciation}</i><br></br>
-						"{todaysWord.exampleEnglish}" <br></br><br></br>
-					</span>
-				</div>
-				
-				<h3>Game Stats</h3>
-				<span className='instructionsOverlay'>
-					Games Played: {playerState.playCount}<br></br>
-					Win %: {playerState.winCount/playerState.playCount * 100}<br></br>
-					Current Streak: {playerState.currentPlayStreak}<br></br>
-					Streak Record: {playerState.maxPlayStreak}<br></br><br></br>
-				</span>
-				<button className='startButton' onClick={() => {setGameOverOverlay(false);}}>
-					Close
-				</button>
-			</Overlay>
-		*/}
 		</div>
 	);
 }
