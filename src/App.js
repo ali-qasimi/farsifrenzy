@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import Grid from './component/grid/grid';
-import Keyboard from './component/keyboard/keyboard';
-import { flushSync } from 'react-dom';
+// import Grid from './component/grid/grid';
+// import Keyboard from './component/keyboard/keyboard';
+// import { flushSync } from 'react-dom';
 import Overlay from "react-overlay-component";
-import {Buffer} from 'buffer';
 // import RawWordList from './constants/FourLetterWordListEncoded.txt'
 import { Icon } from '@iconify/react'
 import Countdown from 'react-countdown';
@@ -66,6 +65,9 @@ function App() {
 						}
 					})
 				}
+				if (!gameStateFromLocalStorage.endGame) {
+					setInstructionOverlay(true);
+				}
 			} else {
 				//state will have default value, only add below
 				setGameState(previousState => {
@@ -74,6 +76,7 @@ function App() {
 						midnightTimestamp: todaysWord.midnightTimestamp
 					}
 				});
+				setInstructionOverlay(true);
 			}
 
 			/*if (playerStateFromLocalStorage) {
@@ -116,7 +119,8 @@ function App() {
 
 		getTodaysWord();
 		// todaysWord = getTodaysWord();
-		setInstructionOverlay(true);
+		
+		// setInstructionOverlay(true);
 	}, []);
 		
 	const [gameState, setGameState] = useState({
@@ -226,7 +230,7 @@ function App() {
 		// top: `5em`,
 		// clickDismiss: true,
 		// escapeDismiss: false,
-		// focusOutline: false,
+		focusOutline: false,
 		// contentClass: "",
 	};
 
@@ -341,11 +345,13 @@ function App() {
 	useEffect(() => {
 		if (gameState.rowPosition <= rowCount && gameState.columnPosition == 0) {
 			submitButtonStyle = {
+				cursor: 'pointer',
 				minHeight: '50px',
 				minWidth: '40px',
 				textAlign: 'center',
 				fontSize: '110%',
 				fontFamily: 'righteous',
+				color: 'black',
 				padding: '0',
 				margin: '1px',
 				borderRadius: '7px',
@@ -354,11 +360,13 @@ function App() {
 			}
 		} else {
 			submitButtonStyle = {
+				cursor: 'pointer',
 				minHeight: '50px',
 				minWidth: '40px',
 				textAlign: 'center',
 				fontSize: '110%',
 				fontFamily: 'righteous',
+				color: 'black',
 				padding: '0',
 				margin: '1px',
 				borderRadius: '7px',
@@ -552,7 +560,7 @@ function App() {
 
 			{gameState.grid.map((grid, idx) => {
 				return(
-					<div className='row' key={idx}>
+					<div className="row" key={idx}>
 						{grid.map((row, idx) => {
 							
 							let cellStyleParent = {
@@ -608,19 +616,19 @@ function App() {
 				)
 			})}
 
-			<div className='keyboard'>
-				{/* <h1>{gameState.submittedWord}</h1> */}
-				{/* <h2>{gameState.rowPosition}, {gameState.columnPosition}</h2> */}
-				<div className='keys'>
+			<div className="keyboard">
+				<div className="keyboard-rows">
 					
 					{gameState.keys[0].map((key,idx) => {
 						let keyStyle = {
+							cursor: 'pointer',
 							minHeight: '50px',
 							width: 'calc(100% / 12 - 3px)',
 							maxWidth: '30px',
 							textAlign: 'center',
 							fontSize: '150%',
 							fontFamily: "koodak",
+							color: "black",
 							padding: '0',
 							margin: '1px',
 							backgroundColor: key.color,
@@ -632,15 +640,17 @@ function App() {
 						)
 					})}
 				</div>
-				<div className='keys'>
+				<div className="keyboard-rows">
 					{gameState.keys[1].map((key,idx) => {
 						let keyStyle = {
+							cursor: 'pointer',
 							minHeight: '50px',
 							width: 'calc(100% / 12 - 3px)',
 							maxWidth: '30px',
 							textAlign: 'center',
 							fontSize: '150%',
 							fontFamily: "koodak",
+							color: "black",
 							padding: '0',
 							margin: '1px',
 							backgroundColor: key.color,
@@ -652,17 +662,19 @@ function App() {
 						)
 					})}
 				</div>
-				<div className='keys'>
+				<div className="keyboard-rows">
 					<button onClick={submitWord} type="submit" style={submitButtonStyle}>Enter</button>
 					{/* <button onClick={submitWord} type="submit" className='enter-del-key'>Enter</button> */}
 					{gameState.keys[2].map((key,idx) => {
 						let keyStyle = {
+							cursor: 'pointer',
 							minHeight: '50px',
 							width: 'calc(100% / 12 - 3px)',
 							maxWidth: '30px',
 							textAlign: 'center',
 							fontSize: '150%',
 							fontFamily: "koodak",
+							color: "black",
 							padding: '0',
 							margin: '1px',
 							backgroundColor: key.color,
@@ -683,7 +695,7 @@ function App() {
 				<div className='instructionsOverlay'>
 					For a 4-letter word you guess, each tile colour will change to: <br></br><br></br>
 					- <strong>Grey:</strong> Wrong letter <br></br>
-					<div className='row'>
+					<div className="row">
 							<div className='instructionCell greyCell'>
 								ی
 							</div>
@@ -698,7 +710,7 @@ function App() {
 							</div>
 					</div>
 					- <strong>Yellow:</strong> Correct letter, at the wrong tile <br></br>
-					<div className='row'>
+					<div className="row">
 							<div className='instructionCell greyCell'>
 								ب
 							</div>
@@ -718,7 +730,7 @@ function App() {
 							</div>
 					</div>
 					- <strong>Green:</strong> Correct Letter, at the correct tile <br></br>
-					<div className='row'>
+					<div className="row">
 							<div className='instructionCell greyCell'>
 								ن
 							</div>
@@ -738,7 +750,7 @@ function App() {
 							</div>
 					</div>
 				</div>
-				<button className='startButton' onClick={() => {setInstructionOverlay(false);}}>
+				<button className="startButton" onClick={() => {setInstructionOverlay(false);}}>
 					Start
 				</button>
 			</Overlay>

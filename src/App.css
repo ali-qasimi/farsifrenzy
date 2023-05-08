@@ -6,7 +6,7 @@
 
 .App-header {
   background-color: #141f34;
-  height: 10vw;
+  height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -68,12 +68,22 @@
   padding-bottom: 1vh;
 }
 
+.keyboard-rows {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: nowrap;
+}
+
 .enter-del-key {
+  cursor: pointer;
   min-height: 50px;
   min-width: 40px;
   text-align: center;
   font-size: 110%;
   font-family: righteous;
+  color: black;
   padding: 0;
   margin: 1px;
   border-radius: 7px;
@@ -81,26 +91,12 @@
   background-color: lightblue;
 }
 
-/* .keys0 */
-/* .keys1 */
-.keys2
-.keys {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: stretch;
-  flex-wrap: nowrap;
-  width: 5px;
-  /* height: 50px; */
-  /* width: 50px; */
-  margin-top: 20px;
-}
-
 .instructionsOverlay {
   text-align: left;
 }
 
 .startButton {
+  cursor: pointer;
   height: 10%;
   width: 50%;
   font-size: 150%;
@@ -112,6 +108,7 @@
 }
 
 .statsCloseButton {
+  cursor: pointer;
   height: 20%;
   width: 50%;
   font-size: 150%;
@@ -133,6 +130,7 @@
 }
 
 .menu-icon {
+  cursor: pointer;
   height: 50px;
   width: 50px;
   font-size: 150%;
