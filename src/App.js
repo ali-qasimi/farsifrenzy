@@ -25,6 +25,7 @@ const rowCount = 4;
 var gameWon = false;
 var solution;
 var msTillNextDay;
+var submitButtonStyle;
 // var growShrinkTransform = '';
 
 function App() {
@@ -336,6 +337,36 @@ function App() {
 		}
 		
 	}, [gameState.submittedWord]);
+
+	useEffect(() => {
+		if (gameState.rowPosition <= rowCount && gameState.columnPosition == 0) {
+			submitButtonStyle = {
+				minHeight: '50px',
+				minWidth: '40px',
+				textAlign: 'center',
+				fontSize: '110%',
+				fontFamily: 'righteous',
+				padding: '0',
+				margin: '1px',
+				borderRadius: '7px',
+				border: 'none',
+				backgroundColor: '#52bde0'
+			}
+		} else {
+			submitButtonStyle = {
+				minHeight: '50px',
+				minWidth: '40px',
+				textAlign: 'center',
+				fontSize: '110%',
+				fontFamily: 'righteous',
+				padding: '0',
+				margin: '1px',
+				borderRadius: '7px',
+				border: 'none',
+				backgroundColor: 'lightblue'
+			}
+		}
+	}, [gameState.columnPosition, gameState.rowPosition])
 	
 	function assessWord(submittedWord, todaysWord) {
 	
@@ -622,7 +653,8 @@ function App() {
 					})}
 				</div>
 				<div className='keys'>
-					<button onClick={submitWord} type="submit" className='enter-del-key'>Enter</button>
+					<button onClick={submitWord} type="submit" style={submitButtonStyle}>Enter</button>
+					{/* <button onClick={submitWord} type="submit" className='enter-del-key'>Enter</button> */}
 					{gameState.keys[2].map((key,idx) => {
 						let keyStyle = {
 							minHeight: '50px',
@@ -646,7 +678,7 @@ function App() {
 			</div>
 
 			<Overlay configs={overlayConfig} isOpen={isInstructionOverlayOpen} closeOverlay={closeInstructionOverlay} >
-				<h2 className='english-theme-font'>Welcome to Farsi Frenzy!</h2>
+				<h2 className='english-theme-font'>Welcome to FarsiFrenzy!</h2>
 				<h3 className='english-theme-font'> Guess today's word in 5 tries</h3>
 				<div className='instructionsOverlay'>
 					For a 4-letter word you guess, each tile colour will change to: <br></br><br></br>
