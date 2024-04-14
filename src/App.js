@@ -556,7 +556,7 @@ function App() {
 			<header className="App-header">
 				FarsiFrenzy
 			</header>
-			<div className='banner'></div>
+			{/* <div className='banner'></div> */}
 
 			{gameState.grid.map((grid, idx) => {
 				return(
