@@ -61,7 +61,7 @@
 }
 
 .keyboard {
-  margin-top: 5vh;
+  margin-top: 3vh;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -209,4 +209,19 @@
 .countdownTimer {
   font-size: 30px;
   padding-bottom: 10px;
+}
+
+.learnFarsiDiv {
+  margin: auto;
+  margin-top: 2.5vh;
+  padding: 3px;
+  border: 1px solid white;
+  width: fit-content;
+}
+
+.learnFarsiHref {
+  font-family: righteous;
+  font-size: 20px;
+  color: white;
+  text-decoration: none;
 }

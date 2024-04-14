@@ -616,6 +616,10 @@ function App() {
 				)
 			})}
 
+			<div className="learnFarsiDiv">
+				<a className="learnFarsiHref" href="https://www.udemy.com/course/masteringfarsi/?referralCode=6B7C20986430DA92C2BE" target="_blank">Learn Farsi <Icon icon="websymbol:link" /></a>
+			</div>
+
 			<div className="keyboard">
 				<div className="keyboard-rows">
 					
