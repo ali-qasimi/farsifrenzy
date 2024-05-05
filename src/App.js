@@ -235,7 +235,7 @@ function App() {
 	};
 
 	function getTodaysIndex() {
-		const epochMs = new Date('May 8, 2023 00:00:00').valueOf();
+		const epochMs = new Date('May 5, 2024 00:00:00').valueOf();
 		const now = Date.now();
 		const msInDay = 86400000;
 		const index = Math.floor((now - epochMs) / msInDay);
