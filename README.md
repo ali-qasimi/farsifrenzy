@@ -2,7 +2,7 @@
 
 Farsi variation of the famous word game 'Wordle', developed with React and words generated with GPT-4.
 
-Available at: [farsifrenzy.com](https://farsifrenzy.com)
+Available at: [(https://farsifrenzy.com](https://farsifrenzy.netlify.app/))
 
 ![farsifrenzy](https://github.com/ali-qasimi/farsifrenzy/assets/43767565/beffe678-345d-4994-8b11-29ec11ed8fbe)
 
